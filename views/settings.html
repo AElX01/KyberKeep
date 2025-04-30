@@ -20,9 +20,6 @@
           <div class="nav-button"><a href="vaults.html"><i class="fas fa-vault"></i></i><span>My Vaults</span></a></div>
           <div class="nav-button"><a href="generator.html"><i class="fas fa-plus"></i><span>Generator</span></a></div>
           <hr/>
-          <div class="nav-button"><a href="export.html"><i class="fas fa-upload"></i><span>Export Vault</span></a></div>
-          <div class="nav-button"><a href="import.html"><i class="fas fa-download"></i><span>Import Vault</span></a></div>
-          <hr/>
           <div class="nav-button"><a href="settings.html"><i class="fas fa-gear"></i><span>Settings</span></a></div>
           <div class="nav-button"><a href="login.html"><i class="fas fa-right-from-bracket"></i><span>Logout</span></div></a>
           <div id="nav-content-highlight"></div>
@@ -40,6 +37,171 @@
             <p>Your passwords are <strong>highly protected!</strong></p>
           </div>
         </div>
-      </div>    
+      </div> 
+      
+      <div id="main-content">
+        <h1>Settings</h1>
+        <button id="passwords_btn" class="edit_btn" style="margin-right: 2rem;"><i class="fas fa-lock"></i> My Account</button>
+        <button id="usernames_btn" class="edit_btn"><i class="fas fa-shield"></i> Security</button>
+
+        <div id="main-generate-password" style="margin-top: 5rem;">
+            <h3 class="modal-section-title">Username</h3>
+            <div class="modal-field-group">
+              <div id="nav-footer-avatar"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRCx-P-wWDkbH5PcEUCkqlmuY_JmJ2shgwk2w&s"/></div>
+              <div class="modal-field">
+                <div class="modal-data-create" contenteditable="true" data-editable="true">Tux</div>
+              </div>
+            </div>
+
+            <h3 class="modal-section-title">Change Email</h3>
+            <div class="modal-field-group">
+              <div class="modal-field">
+                <label>Master password</label>
+                <div class="modal-data-create" contenteditable="true" data-editable="true"></div>
+              </div>
+            </div>
+            <div class="modal-field-group" style="margin-top: 0.5rem;">
+              <div class="modal-field">
+                <label>New Email</label>
+                <div class="modal-data-create" contenteditable="true" data-editable="true"></div>
+              </div>
+            </div>
+
+            <h3 class="modal-section-title">Danger Zone</h3>
+            <div class="modal-field-group">
+              <div class="modal-field">
+                <button class="delete_btn"><i class="fas fa-trash"></i> Delete account</button>
+              </div>
+            </div>
+        </div>
+
+        
+        <div id="main-generate-username" style="margin-top: 5rem; display: none;">
+          <h2>Change master password</h2>
+            <div class="modal-field-group">
+              <div class="modal-field">
+                <label>Current master password</label>
+                <div class="modal-data-create" contenteditable="true" data-editable="true"></div>
+              </div>
+            </div>
+            <div class="modal-field-group" style="margin-top: 0.5rem;">
+              <div class="modal-field">
+                <label>New master password</label>
+                <div class="modal-data-create" contenteditable="true" data-editable="true"></div>
+              </div>
+            </div>
+            <div class="modal-field-group" style="margin-top: 0.5rem;">
+              <div class="modal-field">
+                <label>Confirm master password</label>
+                <div class="modal-data-create" contenteditable="true" data-editable="true"></div>
+              </div>
+            </div>
+      </div>
+
+      <div id="confirmation_modal" class="modal-overlay" style="display: none;">
+        <div class="modal-content">
+          <button class="modal-close">&times;</button>
+      
+          <div class="modal-header">
+            <h2 class="modal-title">Save changes</h2>
+          </div>
+      
+          <div class="modal-field">
+            <p style="text-align: center;">Are you sure you want to save changes?</p>
+          </div>
+      
+          <div class="modal-actions">
+            <button class="edit_btn"><i class="fas fa-pen"></i> Save</button>
+            <a href="settings.html"><button class="cancel_btn"><i class="fas fa-x"></i> Cancel</button></a>
+          </div> 
+      </div>
+
+      <script>
+        function toggleModal(modal_id) {
+          const modal = document.querySelector(modal_id);
+          modal.style.display = (modal.style.display === 'flex') ? 'none' : 'flex';
+        }
+      
+
+        document.addEventListener('DOMContentLoaded', () => {
+          const closeBtn = document.querySelector('.modal-close');
+          closeBtn.addEventListener('click', () => {
+            document.querySelector('.modal-overlay').style.display = 'none';
+          });
+        });
+     </script>
+
+     <script>
+       document.addEventListener("DOMContentLoaded", () => {
+       
+         const editableFields = document.querySelectorAll(".modal-data-create[data-editable='true']");
+       
+         editableFields.forEach((field) => {
+           field.addEventListener("click", () => {
+           
+             field.setAttribute("contenteditable", "true");
+             field.focus(); 
+           });
+         
+           field.addEventListener("blur", () => {
+           
+             field.setAttribute("contenteditable", "false");
+           });
+         
+           field.addEventListener("keydown", (e) => {
+           
+             if (e.key === "Enter") {
+               e.preventDefault(); 
+               field.blur(); 
+               toggleModal('#confirmation_modal');
+             }
+           });
+         });
+       });
+     </script>
+
+      <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const navToggle = document.getElementById("nav-toggle");
+            const mainContent = document.getElementById("main-content");
+
+
+            const adjustMainContent = () => {
+                if (navToggle.checked) {
+                
+                    mainContent.style.left = `calc(var(--navbar-width-min) + 2vw)`;
+                    mainContent.style.transition = "left 0.3s ease"; 
+                } else {
+                
+                    mainContent.style.left = `calc(var(--navbar-width) + 2vw)`;
+                }
+            };
+        
+        
+            adjustMainContent();
+        
+        
+            navToggle.addEventListener("change", adjustMainContent);
+        });
+        </script>
+
+        <script>
+            document.addEventListener("DOMContentLoaded", () => {
+                const users_section = document.getElementById('main-generate-username');
+                const passwords_section = document.getElementById('main-generate-password');
+                const password_btn = document.getElementById('passwords_btn');
+                const username_btn = document.getElementById('usernames_btn');
+
+                password_btn.addEventListener('click', () => {
+                  users_section.style.display = 'none';
+                  passwords_section.style.removeProperty('display');
+                });
+
+                username_btn.addEventListener('click', () => {
+                  passwords_section.style.display = 'none';
+                  users_section.style.removeProperty('display');
+                });
+            })
+        </script>
 </body>
 </html>

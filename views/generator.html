@@ -20,9 +20,6 @@
           <div class="nav-button"><a href="vaults.html"><i class="fas fa-vault"></i></i><span>My Vaults</span></a></div>
           <div class="nav-button"><a href="generator.html"><i class="fas fa-plus"></i><span>Generator</span></a></div>
           <hr/>
-          <div class="nav-button"><a href="export.html"><i class="fas fa-upload"></i><span>Export Vault</span></a></div>
-          <div class="nav-button"><a href="import.html"><i class="fas fa-download"></i><span>Import Vault</span></a></div>
-          <hr/>
           <div class="nav-button"><a href="settings.html"><i class="fas fa-gear"></i><span>Settings</span></a></div>
           <div class="nav-button"><a href="login.html"><i class="fas fa-right-from-bracket"></i><span>Logout</span></div></a>
           <div id="nav-content-highlight"></div>
@@ -103,9 +100,32 @@
         </div>
 
         
-        <div id="main-generate-username">
+        <div id="main-generate-username" style="margin-top: 5rem; display: none;">
+          <h3 class="modal-section-title">Username</h3>
+          <div class="modal-field-group">
+            <div class="modal-field">
+              <div class="modal-data-create">Anahi</div>
+            </div>
+            <button class="modal_cpy_btn"><i class="fas fa-arrows-rotate"></i></button>
+            <button class="modal_cpy_btn"><i class="fas fa-clone"></i></button>
+          </div>
 
-        </div>
+          <h3 class="modal-section-title">Options</h3>
+          <div class="modal-field-group" style="margin-top: 2rem;">
+              <label>
+                  <input type="checkbox" class="input">
+                  <span class="custom-checkbox"></span>
+                  <span class="checkbox-text">Capitalize</span>
+              </label>
+          </div>
+          <div class="modal-field-group" style="margin-top: 1rem;">
+              <label>
+                  <input type="checkbox" class="input">
+                  <span class="custom-checkbox"></span>
+                  <span class="checkbox-text">Include number</span>
+              </label>
+          </div>
+      </div>
       </div>
 
       <script>
@@ -136,15 +156,18 @@
         <script>
             document.addEventListener("DOMContentLoaded", () => {
                 const users_section = document.getElementById('main-generate-username');
+                const passwords_section = document.getElementById('main-generate-password');
                 const password_btn = document.getElementById('passwords_btn');
                 const username_btn = document.getElementById('usernames_btn');
 
                 password_btn.addEventListener('click', () => {
-
+                  users_section.style.display = 'none';
+                  passwords_section.style.removeProperty('display');
                 });
 
                 username_btn.addEventListener('click', () => {
-
+                  passwords_section.style.display = 'none';
+                  users_section.style.removeProperty('display');
                 });
             })
         </script>
