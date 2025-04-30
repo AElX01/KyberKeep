@@ -1,0 +1,381 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <title>Gestión de Tareas</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+      crossorigin="anonymous"
+    />
+    <script
+      src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+      integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"
+      integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+"
+      crossorigin="anonymous"
+    ></script>
+    <script src="https://kit.fontawesome.com/8a6120adec.js" crossorigin="anonymous"></script>
+
+    <style>
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+      }
+      body {
+        background: linear-gradient(135deg, #3b2f61 0%, #3e5fe7 100%);
+        min-height: 100vh;
+      }
+      #icon {
+        color: white;
+        cursor: pointer;
+      }
+      tr:has(input.form-check-input:checked) td:nth-child(2) {
+        text-decoration: line-through;
+      }
+      #addTaskBtn {
+        position: fixed;
+        bottom: 10px;
+        right: 10px;
+        width: 50px;
+        height: 50px;
+        font-size: 24px;
+        border-radius: 6px;
+        background-color: #3e7d3a;
+        color: #fff;
+        border: none;
+      }
+    </style>
+  </head>
+
+  <body>
+    <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="./home.html">
+          <img
+            src="images/shrek.jpg"
+            alt="shrek"
+            class="rounded-circle"
+            style="object-fit: cover; height: 35px; width: 35px;"
+          >
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mynavbar">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="mynavbar">
+          <ul class="navbar-nav me-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="./tasks.html">Tareas</a>
+            </li>
+            <li class="nav-item dropdown">
+              <a
+                class="nav-link dropdown-toggle"
+                href="#"
+                id="etiquetasDropdown"
+                role="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                Etiquetas
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="etiquetasDropdown">
+                <li><a class="dropdown-item" href="#">Salud</a></li>
+                <li><a class="dropdown-item" href="#">Proyectos</a></li>
+                <li><a class="dropdown-item" href="#">Higiene</a></li>
+                <li><a class="dropdown-item" href="#">Trabajo</a></li>
+                <!-- Modal para Nueva Etiqueta -->
+                <li>
+                  <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#newEtiquetaModal">
+                    <strong>+</strong> Nueva Etiqueta
+                  </a>
+                </li>
+              </ul>
+            </li>
+          </ul>
+
+          <form class="d-flex align-items-center flex-nowrap">
+            <div class="form-group mx-2">
+              <input type="text" class="form-control" placeholder="Buscar">
+            </div>
+            <div class="form-group mx-2">
+              <button type="button" class="btn btn-outline-success">Buscar</button>
+            </div>
+            <div class="form-group mx-2">
+              <i
+                class="fas fa-sign-out-alt fa-2x"
+                id="icon"
+                title="Cerrar sesión"
+                data-bs-toggle="modal"
+                data-bs-target="#logoutModal"
+              ></i>
+            </div>
+          </form>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Modal de confirmación de cierre de sesión -->
+    <div class="modal fade" id="logoutModal" tabindex="-1" aria-labelledby="logoutModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered modal-sm">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="logoutModalLabel">Confirmar Cierre de Sesión</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+          </div>
+          <div class="modal-body">
+            ¿Seguro de que deseas cerrar sesión?
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+            <button type="button" class="btn btn-primary" onclick="location.href='./login.html'">Aceptar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal para Nueva Etiqueta -->
+    <div
+      class="modal fade"
+      id="newEtiquetaModal"
+      tabindex="-1"
+      aria-labelledby="newEtiquetaModalLabel"
+      aria-hidden="true"
+      data-bs-backdrop="static"
+      data-bs-keyboard="false"
+    >
+      <div class="modal-dialog modal-dialog-centered modal-sm">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="newEtiquetaModalLabel">Nueva Etiqueta</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+          </div>
+          <div class="modal-body">
+            <form>
+              <div class="mb-3">
+                <label for="nombreEtiqueta" class="form-label">Nombre</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="nombreEtiqueta"
+                  placeholder="Ingresa el nombre"
+                >
+              </div>
+              <div class="mb-3">
+                <label for="colorEtiqueta" class="form-label">Color</label>
+                <input
+                  type="color"
+                  class="form-control"
+                  id="colorEtiqueta"
+                >
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+              Cancelar
+            </button>
+            <button type="button" class="btn btn-primary" data-bs-dismiss="modal">
+              Crear Etiqueta
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal para Nueva Tarea -->
+    <div class="modal fade" id="newTaskModal" tabindex="-1" aria-labelledby="newTaskModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered modal-sm">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="newTaskModalLabel">Nueva Tarea</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+          </div>
+          <div class="modal-body">
+            <form>
+              <div class="mb-3">
+                <label for="taskTitle" class="form-label">Nombre</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="taskTitle"
+                  placeholder="Deporte"
+                >
+              </div>
+              <div class="mb-3">
+                <label for="taskDate" class="form-label">Fecha</label>
+                <input
+                  type="date"
+                  class="form-control"
+                  id="taskDate"
+                >
+              </div>
+              <div class="mb-3">
+                <label for="taskLabel" class="form-label">Etiqueta</label>
+                <select class="form-select" id="taskLabel">
+                  <option selected>Salud</option>
+                  <option value="Proyectos">Proyectos</option>
+                  <option value="Higiene">Higiene</option>
+                  <option value="Trabajo">Trabajo</option>
+                </select>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+              Cancelar
+            </button>
+            <button type="button" class="btn btn-primary" data-bs-dismiss="modal">
+              Crear Tarea
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <table class="table table-hover align-middle table-primary mb-0">
+      <thead>
+        <tr>
+          <th><i class="fas fa-check"></i></th>
+          <th>Tarea</th>
+          <th>Etiqueta</th>
+          <th>Fecha</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <th scope="row">
+            <input class="form-check-input" type="checkbox">
+          </th>
+          <td>Escribir 3 páginas</td>
+          <td><span class="badge bg-primary">Proyectos</span></td>
+          <td>15/02/2025</td>
+          <td>
+            <div class="d-flex gap-2">
+              <i class="fas fa-pen text-primary"></i>
+              <i class="fas fa-trash text-danger"></i>
+              <i class="fas fa-tag text-success"></i>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <th scope="row">
+            <input class="form-check-input" type="checkbox">
+          </th>
+          <td>Ir al gimnasio</td>
+          <td><span class="badge bg-warning text-dark">Salud</span></td>
+          <td>15/02/2025</td>
+          <td>
+            <div class="d-flex gap-2">
+              <i class="fas fa-pen text-primary"></i>
+              <i class="fas fa-trash text-danger"></i>
+              <i class="fas fa-tag text-success"></i>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <th scope="row">
+            <input class="form-check-input" type="checkbox">
+          </th>
+          <td>Dormir bien</td>
+          <td><span class="badge bg-warning text-dark">Salud</span></td>
+          <td>15/02/2025</td>
+          <td>
+            <div class="d-flex gap-2">
+              <i class="fas fa-pen text-primary"></i>
+              <i class="fas fa-trash text-danger"></i>
+              <i class="fas fa-tag text-success"></i>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <th scope="row">
+            <input class="form-check-input" type="checkbox">
+          </th>
+          <td>Sacar basura</td>
+          <td><span class="badge bg-success">Higiene</span></td>
+          <td>15/02/2025</td>
+          <td>
+            <div class="d-flex gap-2">
+              <i class="fas fa-pen text-primary"></i>
+              <i class="fas fa-trash text-danger"></i>
+              <i class="fas fa-tag text-success"></i>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <th scope="row">
+            <input class="form-check-input" type="checkbox">
+          </th>
+          <td>Lavarme los dientes</td>
+          <td><span class="badge bg-success">Higiene</span></td>
+          <td>15/02/2025</td>
+          <td>
+            <div class="d-flex gap-2">
+              <i class="fas fa-pen text-primary"></i>
+              <i class="fas fa-trash text-danger"></i>
+              <i class="fas fa-tag text-success"></i>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <th scope="row">
+            <input class="form-check-input" type="checkbox" checked>
+          </th>
+          <td>Armar índice</td>
+          <td><span class="badge bg-primary">Proyectos</span></td>
+          <td>14/02/2025</td>
+          <td>
+            <div class="d-flex gap-2">
+              <i class="fas fa-pen text-primary"></i>
+              <i class="fas fa-trash text-danger"></i>
+              <i class="fas fa-tag text-success"></i>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <th scope="row">
+            <input class="form-check-input" type="checkbox" checked>
+          </th>
+          <td>Bañarse</td>
+          <td><span class="badge bg-success">Higiene</span></td>
+          <td>14/02/2025</td>
+          <td>
+            <div class="d-flex gap-2">
+              <i class="fas fa-pen text-primary"></i>
+              <i class="fas fa-trash text-danger"></i>
+              <i class="fas fa-tag text-success"></i>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <th scope="row">
+            <input class="form-check-input" type="checkbox" checked>
+          </th>
+          <td>Reunión con Matt</td>
+          <td><span class="badge bg-dark">Trabajo</span></td>
+          <td>15/02/2025</td>
+          <td>
+            <div class="d-flex gap-2">
+              <i class="fas fa-pen text-primary"></i>
+              <i class="fas fa-trash text-danger"></i>
+              <i class="fas fa-tag text-success"></i>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- Botón verde -->
+    <button type="button" id="addTaskBtn" class="btn d-flex justify-content-center align-items-center" data-bs-toggle="modal" data-bs-target="#newTaskModal">
+      +
+    </button>
+  </body>
+</html>
