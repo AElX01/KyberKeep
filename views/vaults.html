@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://kit.fontawesome.com/ea89dd5152.js" crossorigin="anonymous"></script>
+
+    <link rel="stylesheet" href="../assets/css/sidebar.css">
+    <link rel="stylesheet" href="../assets/css/vaults.css">
+</head>
+<body>
+    <div id="nav-bar">
+        <input id="nav-toggle" type="checkbox"/>
+        <a id="nav-title" href="#"><div id="nav-header"><img src="../assets/icon/Logo.png" style="width: 50px; height: 50px;"></a>
+          <label for="nav-toggle"><span id="nav-toggle-burger"></span></label>
+          <hr/>
+        </div>
+        <div id="nav-content">
+          <div class="nav-button"><a href="vaults.html"><i class="fas fa-vault"></i></i><span>My Vaults</span></a></div>
+          <div class="nav-button"><a href="generator.html"><i class="fas fa-plus"></i><span>Generator</span></a></div>
+          <hr/>
+          <div class="nav-button"><a href="export.html"><i class="fas fa-upload"></i><span>Export Vault</span></a></div>
+          <div class="nav-button"><a href="import.html"><i class="fas fa-download"></i><span>Import Vault</span></a></div>
+          <hr/>
+          <div class="nav-button"><a href="settings.html"><i class="fas fa-gear"></i><span>Settings</span></a></div>
+          <div class="nav-button"><a href="login.html"><i class="fas fa-right-from-bracket"></i><span>Logout</span></div></a>
+          <div id="nav-content-highlight"></div>
+        </div>
+        <input id="nav-footer-toggle" type="checkbox"/>
+        <div id="nav-footer">
+          <div id="nav-footer-heading">
+            <div id="nav-footer-avatar"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRCx-P-wWDkbH5PcEUCkqlmuY_JmJ2shgwk2w&s"/></div>
+            <div id="nav-footer-titlebox"><a id="nav-footer-title" href="#">Tux</a><span id="nav-footer-subtitle">tux@proton.me</span></div>
+            <label for="nav-footer-toggle"><i class="fas fa-caret-up"></i></label>
+          </div>
+          <div id="nav-footer-content">
+            <p><strong>Reused Passwords:</strong> 0</p>
+            <p><strong>Insecure Sites:</strong> 0</p><br>
+            <p>Your passwords are <strong>highly protected!</strong></p>
+          </div>
+        </div>
+      </div>
+      <div id="main-content">
+        <h1>My Vaults</h1>
+        <div class="vault-grid" id="vault-container">
+          <div class="vault-card">
+            <img class="vault-icon" src="https://www.google.com/s2/favicons?domain=github.com" alt="GitHub" />
+
+            <div class="vault-info">
+              <div class="vault-title">GitHub</div>
+              <div class="vault-meta">AElX01</div>
+            </div>
+          
+            <div class="vault-actions">
+              <button><i class="fas fa-up-right-from-square"></i></button>
+              <button><i class="fas fa-clone"></i></button>
+              
+            </div>
+          </div>   
+          
+          <div class="vault-card">
+            <img class="vault-icon" src="https://www.google.com/s2/favicons?domain=hackthebox.com" alt="HackTheBox" />
+
+            <div class="vault-info">
+              <div class="vault-title">HackTheBox</div>
+              <div class="vault-meta">daniel.canul@iteso.mx</div>
+            </div>
+          
+            <div class="vault-actions">
+              <button><i class="fas fa-up-right-from-square"></i></button>
+              <button><i class="fas fa-clone"></i></button>
+              
+            </div>
+          </div> 
+
+          <div class="vault-card">
+            <img class="vault-icon" src="https://www.google.com/s2/favicons?domain=proton.me" alt="ProtonMail" />
+
+            <div class="vault-info">
+              <div class="vault-title">ProtonMail</div>
+              <div class="vault-meta">ncat@proton.me</div>
+            </div>
+          
+            <div class="vault-actions">
+              <button><i class="fas fa-up-right-from-square"></i></button>
+              <button><i class="fas fa-clone"></i></button>
+              
+            </div>
+          </div>
+
+          <div class="vault-card">
+            <img class="vault-icon" src="https://www.google.com/s2/favicons?domain=iteso.mx" alt="iteso" />
+
+            <div class="vault-info">
+              <div class="vault-title">iteso</div>
+              <div class="vault-meta">daniel.canul@iteso.mx</div>
+            </div>
+          
+            <div class="vault-actions">
+              <button><i class="fas fa-up-right-from-square"></i></button>
+              <button><i class="fas fa-clone"></i></button>
+              
+            </div>
+          </div>
+
+          <div class="vault-card">
+            <img class="vault-icon" src="https://www.google.com/s2/favicons?domain=instagram.com" alt="Instagram" />
+
+            <div class="vault-info">
+              <div class="vault-title">Instagram</div>
+              <div class="vault-meta">Alcasec</div>
+            </div>
+          
+            <div class="vault-actions">
+              <button><i class="fas fa-up-right-from-square"></i></button>
+              <button><i class="fas fa-clone"></i></button>
+              
+            </div>
+          </div>
+        </div>
+
+
+        <button class="new_password" onclick="toggleModal('#create_password_modal')"> 
+          <i class="fas fa-plus"></i>
+        </button>
+      </div> 
+      
+      <div id="info_modal" class="modal-overlay" style="display: none;">
+        <div class="modal-content">
+          <button class="modal-close">&times;</button>
+      
+          <div class="modal-header">
+            <img class="vault-icon" src="https://www.google.com/s2/favicons?domain=github.com" alt="Instagram" />
+            <h2 class="modal-title">Instagram</h2>
+          </div>
+      
+          <h3 class="modal-section-title">Item details</h3>
+          <div class="modal-field">
+            <label>Item name</label>
+            <div class="modal-data">GitHub</div>
+          </div>
+
+          <h3 class="modal-section-title">Login information</h3>
+          <div class="modal-field-group">
+            <div class="modal-field">
+              <label>Username</label>
+              <div class="modal-data" contenteditable="false" data-editable="true">AElX01</div>
+            </div>
+            <button class="modal_cpy_btn"><i class="fas fa-clone"></i></button>
+          </div>
+
+          <div class="modal-field-group">
+            <div class="modal-field">
+              <label>Password</label>
+              <div class="modal-data" contenteditable="false" data-editable="true">••••••••••••</div>
+            </div>
+            <button class="modal_cpy_btn"><i class="fas fa-eye-slash"></i></button>
+            <button class="modal_cpy_btn"><i class="fas fa-clone"></i></button>
+          </div>
+          
+          
+          <h3 class="modal-section-title">Autofill options</h3>
+          <div class="modal-field-group">
+            <div class="modal-field">
+              <label>Website</label>
+              <div class="modal-data" contenteditable="false" data-editable="true">github.com</div>
+            </div>
+            <button class="modal_cpy_btn"><i class="fas fa-up-right-from-square"></i></button>
+            <button class="modal_cpy_btn"><i class="fas fa-clone"></i></button>
+          </div>
+      
+          <div class="modal-actions">
+            <button style="display: none;" class="edit_btn"><i class="fas fa-pen"></i></button>
+            <button class="delete_btn"><i class="fas fa-trash"></i></button>
+          </div>
+        </div>
+      </div>
+
+      <div id="create_password_modal" class="modal-overlay" style="display: none;">
+        <div class="modal-content">
+          <button class="modal-close">&times;</button>
+      
+          <div class="modal-header">
+            <h2 class="modal-title">New Login</h2>
+          </div>
+      
+          <h3 class="modal-section-title">Item details</h3>
+          <div class="modal-field">
+            <label>Item name</label>
+            <div class="modal-data-create" contenteditable="true" data-editable="true"></div>
+          </div>
+
+          <h3 class="modal-section-title">Login information</h3>
+          <div class="modal-field-group">
+            <div class="modal-field">
+              <label>Username</label>
+              <div class="modal-data-create" contenteditable="true" data-editable="true"></div>
+            </div>
+            <button class="modal_cpy_btn"><i class="fas fa-arrows-rotate"></i></button>
+          </div>
+
+          <div class="modal-field-group">
+            <div class="modal-field">
+              <label>Password</label>
+              <div class="modal-data-create" contenteditable="true" data-editable="true"></div>
+            </div>
+            <button class="modal_cpy_btn"><i class="fas fa-eye-slash"></i></button>
+            <button class="modal_cpy_btn"><i class="fas fa-arrows-rotate"></i></button>
+          </div>
+          
+          
+          <h3 class="modal-section-title">Autofill options</h3>
+          <div class="modal-field-group">
+            <div class="modal-field">
+              <label>Website</label>
+              <div class="modal-data-create" contenteditable="true" data-editable="true"></div>
+            </div>
+          </div>
+      
+          <div class="modal-actions">
+            <a href="vaults.html"><button class="cancel_btn"><i class="fas fa-x"></i> Cancel</button></a>
+            <button class="edit_btn"><i class="fas fa-pen"></i> Save</button>
+          </div>
+        </div>
+      </div>
+
+      <div id="confirmation_modal" class="modal-overlay" style="display: none;">
+        <div class="modal-content">
+          <button class="modal-close">&times;</button>
+      
+          <div class="modal-header">
+            <h2 class="modal-title">Save changes</h2>
+          </div>
+      
+          <div class="modal-field">
+            <p style="text-align: center;">Are you sure you want to save this login information?</p>
+          </div>
+      
+          <div class="modal-actions">
+            <button class="edit_btn"><i class="fas fa-pen"></i> Save</button>
+            <a href="vaults.html"><button class="cancel_btn"><i class="fas fa-x"></i> Cancel</button></a>
+          </div>        
+      
+      <script>
+                document.addEventListener("DOMContentLoaded", () => {
+            const navToggle = document.getElementById("nav-toggle");
+            const mainContent = document.getElementById("main-content");
+                
+
+            const adjustMainContent = () => {
+                if (navToggle.checked) {
+
+                    mainContent.style.left = `calc(var(--navbar-width-min) + 2vw)`;
+                    mainContent.style.transition = "left 0.3s ease"; 
+                } else {
+
+                    mainContent.style.left = `calc(var(--navbar-width) + 2vw)`;
+                }
+            };
+          
+
+            adjustMainContent();
+          
+
+            navToggle.addEventListener("change", adjustMainContent);
+        });
+      </script>
+      <script>
+        function toggleModal(modal_id) {
+          const modal = document.querySelector(modal_id);
+          modal.style.display = (modal.style.display === 'flex') ? 'none' : 'flex';
+        }
+      
+
+        document.addEventListener('DOMContentLoaded', () => {
+          const closeBtn = document.querySelector('.modal-close');
+          closeBtn.addEventListener('click', () => {
+            document.querySelector('.modal-overlay').style.display = 'none';
+          });
+        });
+    </script>
+
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        const modal = document.querySelector('.modal-overlay');
+        const closeBtn = document.querySelector('.modal-close');
+      
+ 
+        document.querySelectorAll('.vault-card').forEach(card => {
+          card.addEventListener('click', (e) => {
+
+            if (e.target.closest('.vault-actions button')) return;
+          
+            modal.style.display = 'flex';
+          
+
+            const title = card.querySelector('.vault-title').textContent;
+            const username = card.querySelector('.vault-meta').textContent;
+          
+            modal.querySelector('.modal-title').textContent = title;
+          });
+        });
+      
+ 
+        closeBtn.addEventListener('click', () => {
+          modal.style.display = 'none';
+        });
+      });
+    </script>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+  
+        const editableFields = document.querySelectorAll(".modal-data[data-editable='true']");
+
+        editableFields.forEach((field) => {
+          field.addEventListener("click", () => {
+
+            field.setAttribute("contenteditable", "true");
+            field.focus(); 
+          });
+        
+          field.addEventListener("blur", () => {
+ 
+            field.setAttribute("contenteditable", "false");
+          });
+        
+          field.addEventListener("keydown", (e) => {
+
+            if (e.key === "Enter") {
+              e.preventDefault(); 
+              field.blur(); 
+              toggleModal('#confirmation_modal');
+            }
+          });
+        });
+      });
+    </script>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const closeModalButtons = document.querySelectorAll(".modal-close");
+        const modals = document.querySelectorAll(".modal-overlay");
+
+        closeModalButtons.forEach((button) => {
+          button.addEventListener("click", () => {
+            const modal = button.closest(".modal-overlay");
+            if (modal) {
+              modal.style.display = "none"; 
+            }
+          });
+        });
+      
+        modals.forEach((modal) => {
+          modal.addEventListener("click", (event) => {
+            if (event.target === modal) {
+              modal.style.display = "none";
+            }
+          });
+        });
+      });
+    </script>
+
+</body>
+</html>

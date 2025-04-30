@@ -1,0 +1,357 @@
+#nav-toggle:checked ~ #main-content {
+    width: calc(var(--navbar-width-min) - 16px);
+  }
+  #main-content {
+    position: absolute;
+    top: 1vw;
+    left: calc(var(--navbar-width) + 2vw);
+    right: 1vw;
+    bottom: 1vw;
+    padding-left: 2rem;
+    padding-right: 2rem;
+    background: #f4f6f8;
+    border-radius: 16px;
+    overflow-y: auto;
+    transition: left 0.3s;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    z-index: 1;
+  }
+  
+  /* Adjust for retracted sidebar */
+  #nav-toggle:checked ~ #main-content {
+    left: calc(var(--navbar-width-min) + 2vw);
+  }
+  
+  .vault-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(260px, 1fr));
+    gap: 1.5rem;
+  }
+  
+  .vault-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: white;
+  padding: 1rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease;
+  cursor: pointer;
+  gap: 1rem;
+}
+
+.vault-icon {
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+}
+
+.vault-info {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.vault-title {
+  font-weight: 600;
+  font-size: 1rem;
+  color: #333;
+}
+
+.vault-meta {
+  font-size: 0.875rem;
+  color: #666;
+}
+
+.vault-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.vault-actions button {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 1.1rem;
+  transition: color 0.2s ease;
+}
+
+.vault-actions button:hover {
+  color: #007bff;
+}
+
+.vault-card:hover {
+  transform: translateY(-4px);
+}
+
+.vault-icon {
+  width: 21px;
+  height: 21px;
+  vertical-align: middle; 
+}
+
+/* From Uiverse.io by CristianMontoya98 */ 
+.new_password {
+  width: 6.5em;
+  height: 2.3em;
+  margin: 0.5em;
+  background: black;
+  color: white;
+  border: none;
+  border-radius: 0.625em;
+  font-size: 20px;
+  font-weight: bold;
+  cursor: pointer;
+  position: absolute; /* Change to absolute for positioning within #main-content */
+  bottom: 1.5em; /* Distance from the bottom of #main-content */
+  right: 1.5em; /* Distance from the right of #main-content */
+  z-index: 1;
+  overflow: hidden;
+}
+
+.new_password:hover {
+ color: black;
+}
+
+.new_password:after {
+ content: "";
+ background: white;
+ position: absolute;
+ z-index: -1;
+ left: -20%;
+ right: -20%;
+ top: 0;
+ bottom: 0;
+ transform: skewX(-45deg) scale(0, 1);
+ transition: all 0.5s;
+}
+
+.new_password:hover:after {
+ transform: skewX(-45deg) scale(1, 1);
+ -webkit-transition: all 0.5s;
+ transition: all 0.5s;
+}
+
+    /* Modal Overlay */
+.modal-overlay { 
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+/* Modal Box */
+.modal-content {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 2rem;
+  max-width: 400px;
+  width: 100%;
+  box-shadow: 0 12px 24px rgba(0,0,0,0.2);
+  position: relative;
+  animation: fadeIn 0.3s ease;
+}
+
+/* Close Button */
+.modal-close {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  background: transparent;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+/* Title */
+.modal-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+  color: #333;
+  text-align: center;
+}
+
+/* Field Layout */
+.modal-field-group {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.modal-field {
+  flex-grow: 1;
+  margin-bottom: 0; /* override previous margin */
+}
+
+.modal_cpy_btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 1rem;
+  color: #777;
+  transition: color 0.2s ease;
+  padding: 0.4rem;
+  margin-top: 1rem;
+  border-radius: 6px;
+}
+
+.modal_cpy_btn:hover {
+  color: #007bff;
+  background-color: #f0f0f0;
+}
+
+.modal-field label {
+  display: block;
+  font-size: 0.875rem;
+  color: #777;
+  margin-bottom: 0.25rem;
+}
+
+.modal-data {
+  background: #f5f5f5;
+  padding: 0.5rem 0.75rem;
+  border-radius: 8px;
+  font-family: monospace;
+  font-size: 0.95rem;
+  color: #444;
+}
+
+.modal-data-create {
+    background: #f5f5f5;
+    padding: 0.5rem 0.75rem;
+    border-radius: 8px;
+    font-family: monospace;
+    font-size: 0.95rem;
+    color: #444;
+  }
+
+/* Actions */
+.modal-actions {
+  display: flex;
+  justify-content: right;
+  gap: 0.5rem;
+  margin-top: 1.5rem;
+}
+
+.modal-section-title {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+  color: #444;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 0.25rem;
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.modal-header .vault-icon {
+  width: 25px;
+  height: 25px;
+}
+
+/* Fade-in Animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.delete_btn {
+  padding: 1.3em 3em;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 2.5px;
+  font-weight: 500;
+  color: #000;
+  background-color: #fff;
+  border: none;
+  border-radius: 45px;
+  box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease 0s;
+  cursor: pointer;
+  outline: none;
+}
+
+.delete_btn:hover {
+  background-color: #c42323;
+  box-shadow: 0px 15px 20px rgba(229, 46, 46, 0.4);
+  color: #fff;
+  transform: translateY(-7px);
+}
+
+.delete_btn:active {
+  transform: translateY(-1px);
+}
+
+.edit_btn {
+  padding: 1.3em 3em;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 2.5px;
+  font-weight: 500;
+  color: #000;
+  background-color: #fff;
+  border: none;
+  border-radius: 45px;
+  box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease 0s;
+  cursor: pointer;
+  outline: none;
+}
+
+.edit_btn:hover {
+  background-color: #2359c4;
+  box-shadow: 0px 15px 20px rgba(46, 89, 229, 0.4);
+  color: #fff;
+  transform: translateY(-7px);
+}
+
+.edit_btn:active {
+  transform: translateY(-1px);
+}
+
+.cancel_btn {
+    padding: 1.3em 3em;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 2.5px;
+    font-weight: 500;
+    color: #000;
+    background-color: #fff;
+    border: none;
+    border-radius: 45px;
+    box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease 0s;
+    cursor: pointer;
+    outline: none;
+  }
+  
+  .cancel_btn:hover {
+    background-color: #464646;
+    box-shadow: 0px 15px 20px rgba(43, 43, 43, 0.232);
+    color: #fff;
+    transform: translateY(-7px);
+  }
+  
+  .cancel_btn:active {
+    transform: translateY(-1px);
+  }

@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://kit.fontawesome.com/ea89dd5152.js" crossorigin="anonymous"></script>
+
+    <link rel="stylesheet" href="../assets/css/sidebar.css">
+    <link rel="stylesheet" href="../assets/css/vaults.css">
+</head>
+<body>
+    <div id="nav-bar">
+        <input id="nav-toggle" type="checkbox"/>
+        <a id="nav-title" href="#"><div id="nav-header"><img src="../assets/icon/Logo.png" style="width: 50px; height: 50px;"></a>
+          <label for="nav-toggle"><span id="nav-toggle-burger"></span></label>
+          <hr/>
+        </div>
+        <div id="nav-content">
+          <div class="nav-button"><a href="vaults.html"><i class="fas fa-vault"></i></i><span>My Vaults</span></a></div>
+          <div class="nav-button"><a href="generator.html"><i class="fas fa-plus"></i><span>Generator</span></a></div>
+          <hr/>
+          <div class="nav-button"><a href="export.html"><i class="fas fa-upload"></i><span>Export Vault</span></a></div>
+          <div class="nav-button"><a href="import.html"><i class="fas fa-download"></i><span>Import Vault</span></a></div>
+          <hr/>
+          <div class="nav-button"><a href="settings.html"><i class="fas fa-gear"></i><span>Settings</span></a></div>
+          <div class="nav-button"><a href="login.html"><i class="fas fa-right-from-bracket"></i><span>Logout</span></div></a>
+          <div id="nav-content-highlight"></div>
+        </div>
+        <input id="nav-footer-toggle" type="checkbox"/>
+        <div id="nav-footer">
+          <div id="nav-footer-heading">
+            <div id="nav-footer-avatar"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRCx-P-wWDkbH5PcEUCkqlmuY_JmJ2shgwk2w&s"/></div>
+            <div id="nav-footer-titlebox"><a id="nav-footer-title" href="#">Tux</a><span id="nav-footer-subtitle">tux@proton.me</span></div>
+            <label for="nav-footer-toggle"><i class="fas fa-caret-up"></i></label>
+          </div>
+          <div id="nav-footer-content">
+            <p><strong>Reused Passwords:</strong> 0</p>
+            <p><strong>Insecure Sites:</strong> 0</p><br>
+            <p>Your passwords are <strong>highly protected!</strong></p>
+          </div>
+        </div>
+      </div> 
+      
+      <div id="main-content">
+        <h1>Generator</h1>
+        <button id="passwords_btn" class="edit_btn" style="margin-right: 2rem;"><i class="fas fa-lock"></i> Password</button>
+        <button id="usernames_btn" class="edit_btn"><i class="fas fa-user"></i> Username</button>
+
+        <div id="main-generate-password" style="margin-top: 5rem;">
+            <h3 class="modal-section-title">Password</h3>
+            <div class="modal-field-group">
+              <div class="modal-field">
+                <div class="modal-data-create">g3n3r4t3d_s4mpl3</div>
+              </div>
+              <button class="modal_cpy_btn"><i class="fas fa-arrows-rotate"></i></button>
+              <button class="modal_cpy_btn"><i class="fas fa-clone"></i></button>
+            </div>
+
+            <h3 class="modal-section-title">Options</h3>
+            <div class="modal-field-group">
+              <div class="modal-field">
+                <label>Length</label>
+                <div class="modal-data-create" contenteditable="true" data-editable="true">16</div>
+              </div>
+            </div>
+
+            <h3 class="modal-section-title">Include</h3>
+            <div class="modal-field-group">
+                <div class="modal-field">
+                  <label>Minimum numbers</label>
+                  <div class="modal-data-create" contenteditable="true" data-editable="true">25</div>
+                </div>
+            </div>
+            <div class="modal-field-group">
+                <div class="modal-field">
+                    <label>Minimum special</label>
+                    <div class="modal-data-create" contenteditable="true" data-editable="true">0</div>
+                </div>
+            </div>
+
+            <div class="modal-field-group" style="margin-top: 2rem;">
+                <label>
+                    <input type="checkbox" class="input">
+                    <span class="custom-checkbox"></span>
+                    <span class="checkbox-text">A-Z</span>
+                </label>
+            </div>
+            <div class="modal-field-group" style="margin-top: 1rem;">
+                <label>
+                    <input type="checkbox" class="input">
+                    <span class="custom-checkbox"></span>
+                    <span class="checkbox-text">a-z</span>
+                </label>
+            </div>
+            <div class="modal-field-group" style="margin-top: 1rem;">
+                <label>
+                    <input type="checkbox" class="input">
+                    <span class="custom-checkbox"></span>
+                    <span class="checkbox-text">0-9</span>
+                </label>
+            </div>
+        </div>
+
+        
+        <div id="main-generate-username">
+
+        </div>
+      </div>
+
+      <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const navToggle = document.getElementById("nav-toggle");
+            const mainContent = document.getElementById("main-content");
+
+
+            const adjustMainContent = () => {
+                if (navToggle.checked) {
+                
+                    mainContent.style.left = `calc(var(--navbar-width-min) + 2vw)`;
+                    mainContent.style.transition = "left 0.3s ease"; 
+                } else {
+                
+                    mainContent.style.left = `calc(var(--navbar-width) + 2vw)`;
+                }
+            };
+        
+        
+            adjustMainContent();
+        
+        
+            navToggle.addEventListener("change", adjustMainContent);
+        });
+        </script>
+
+        <script>
+            document.addEventListener("DOMContentLoaded", () => {
+                const users_section = document.getElementById('main-generate-username');
+                const password_btn = document.getElementById('passwords_btn');
+                const username_btn = document.getElementById('usernames_btn');
+
+                password_btn.addEventListener('click', () => {
+
+                });
+
+                username_btn.addEventListener('click', () => {
+
+                });
+            })
+        </script>
+</body>
+</html>
