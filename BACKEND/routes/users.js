@@ -1,17 +1,15 @@
 const express = require('express');
 const routerUsers = express.Router();
-const usersController = require('../controllers/users_api_controller');
-const authenticate = require('../middlewares/authenticate');
 
-// Públicas
-routerUsers.post('/register', usersController.registerUser);
-routerUsers.post('/login',    usersController.loginUser);
-routerUsers.post('/token',    usersController.refreshToken);
-routerUsers.post('/logout',   usersController.logoutUser);
+routerUsers.post('/register', (req, res) => {
+    const { username, email, password, confirm_password } = req.body;
 
-// Protegidas para CRUD perfil
-routerUsers.get('/me',    authenticate, usersController.getUserInfo);
-routerUsers.patch('/me',  authenticate, usersController.updateUserInfo);
-routerUsers.delete('/me', authenticate, usersController.deleteUser);
+    console.log('Username:', username);
+    console.log('Password:', password);
+    console.log('Email', email);
+    console.log('Confirm Password', confirm_password);
+})
+
+//routerUsers.post('/login')
 
 module.exports = routerUsers;

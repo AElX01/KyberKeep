@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Modular Rust + WebAssembly</title>
+</head>
+<body>
+  <h1>Check the Console</h1>
+  <button onclick="sayHello()">Say Hello</button>
+  <button onclick="sayBye()">Say Bye</button>
+
+  <script type="module">
+    import init, { say_hello, say_bye } from "./cryptography_rs/pkg/cryptography_rs.js";
+
+    async function run() {
+      await init();
+      window.sayHello = () => say_hello();
+      window.sayBye = () => say_bye();
+    }
+
+    run();
+  </script>
+</body>
+</html>
