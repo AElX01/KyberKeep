@@ -1,4 +1,3 @@
-import user from "../../BACKEND/models/user";
 import init, { 
     derive_key_from_master_password, 
     generate_auth_hmac,
@@ -87,7 +86,11 @@ async function register_user(event) {
                     return;
                 }
 
-                sessionStorage.setItem('username', formObject.username);
+                return response.json();
+            })
+            .then(user => {
+                sessionStorage.setItem('username', user.username);
+                sessionStorage.setItem('email', user.email);
                 window.location.href = '/';
             })
         }
@@ -138,7 +141,13 @@ async function login(event) {
                 showErrorBanner('something went wrong', errorText);
                 return;
             }
-    
+
+            return response.json();
+        })
+        .then(user => {
+            sessionStorage.setItem('username', user.username);
+            sessionStorage.setItem('email', user.email);
+            sessionStorage.setItem('salt', user.salt);
             window.location.href = '/';
         })
     })
@@ -150,4 +159,11 @@ if (window.location.href === local_url + 'register') {
 
 if (window.location.href === local_url + 'login') {
     document.getElementById('login_form').addEventListener('submit', login);
+}
+
+if (window.location.href === local_url + 'register' || window.location.href === local_url + 'login') {
+    sessionStorage.clear();
+    fetch('/users/logout', {
+        method: 'GET'
+    })
 }

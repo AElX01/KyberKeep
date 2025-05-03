@@ -8,6 +8,7 @@
 
     <link rel="stylesheet" href="../assets/css/sidebar.css">
     <link rel="stylesheet" href="../assets/css/vaults.css">
+
 </head>
 <body>
     <div id="nav-bar">
@@ -28,7 +29,7 @@
         <div id="nav-footer">
           <div id="nav-footer-heading">
             <div id="nav-footer-avatar"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRCx-P-wWDkbH5PcEUCkqlmuY_JmJ2shgwk2w&s"/></div>
-            <div id="nav-footer-titlebox"><a id="nav-footer-title" href="#">Tux</a><span id="nav-footer-subtitle">tux@proton.me</span></div>
+            <div id="nav-footer-titlebox"><a id="nav-footer-title" href="#"></a><span id="nav-footer-subtitle"></span></div>
             <label for="nav-footer-toggle"><i class="fas fa-caret-up"></i></label>
           </div>
           <div id="nav-footer-content">
@@ -40,16 +41,49 @@
       </div> 
       
       <div id="main-content">
+        <div id="something_went_wrong_banner" class="flex flex-col gap-2 w-60 sm:w-72 text-[10px] sm:text-xs z-50">
+          <div
+            class="error-alert cursor-default flex items-center justify-between w-full h-12 sm:h-14 rounded-lg bg-[#232531] px-[10px]"
+          >
+            <div class="flex gap-2">
+              <div class="text-[#d65563] bg-white/5 backdrop-blur-xl p-1 rounded-lg">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke-width="1.5"
+                  stroke="currentColor"
+                  class="w-6 h-6"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z"
+                  ></path>
+                </svg>
+              </div>
+              <div>
+                <p id="something_went_wrong_context" class="text-white"></p>
+                <p id="something_went_wrong_description" class="text-gray-500"></p>
+              </div>
+            </div>
+          </div>
+        
+          <div class="progress-bar-container">
+            <div id="progress_bar" class="progress-bar"></div>
+          </div>
+        </div>
         <h1>Settings</h1>
         <button id="passwords_btn" class="edit_btn" style="margin-right: 2rem;"><i class="fas fa-lock"></i> My Account</button>
         <button id="usernames_btn" class="edit_btn"><i class="fas fa-shield"></i> Security</button>
 
         <div id="main-generate-password" style="margin-top: 5rem;">
+          <form id="edit-user-info-form">
             <h3 class="modal-section-title">Username</h3>
             <div class="modal-field-group">
               <div id="nav-footer-avatar"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRCx-P-wWDkbH5PcEUCkqlmuY_JmJ2shgwk2w&s"/></div>
               <div class="modal-field">
-                <div class="modal-data-create" contenteditable="true" data-editable="true">Tux</div>
+                <input name="username" id="modal-edit-username" class="modal-data">
               </div>
             </div>
 
@@ -57,22 +91,24 @@
             <div class="modal-field-group">
               <div class="modal-field">
                 <label>Master password</label>
-                <div class="modal-data-create" contenteditable="true" data-editable="true"></div>
+                <input name="password" id="modal-edit-masterPassword" class="modal-data">
               </div>
             </div>
             <div class="modal-field-group" style="margin-top: 0.5rem;">
               <div class="modal-field">
                 <label>New Email</label>
-                <div class="modal-data-create" contenteditable="true" data-editable="true"></div>
+                <input name="email" id="modal-edit-email" class="modal-data">
               </div>
             </div>
 
-            <h3 class="modal-section-title">Danger Zone</h3>
+            <h3 class="modal-section-title" style="color: red;">Danger Zone</h3>
+            <button type="submit" class="edit_btn" style="margin-bottom: 1rem;"><i class="fas fa-pen"></i> Edit account</button>
             <div class="modal-field-group">
               <div class="modal-field">
                 <button class="delete_btn"><i class="fas fa-trash"></i> Delete account</button>
               </div>
             </div>
+          </form>
         </div>
 
         
@@ -81,19 +117,25 @@
             <div class="modal-field-group">
               <div class="modal-field">
                 <label>Current master password</label>
-                <div class="modal-data-create" contenteditable="true" data-editable="true"></div>
+                <input type="password" id="modal-mp-edit" class="modal-data">
               </div>
             </div>
             <div class="modal-field-group" style="margin-top: 0.5rem;">
               <div class="modal-field">
                 <label>New master password</label>
-                <div class="modal-data-create" contenteditable="true" data-editable="true"></div>
+                <input type="password" id="modal-mp-new" class="modal-data">
               </div>
             </div>
             <div class="modal-field-group" style="margin-top: 0.5rem;">
               <div class="modal-field">
                 <label>Confirm master password</label>
-                <div class="modal-data-create" contenteditable="true" data-editable="true"></div>
+                <input type="password" id="modal-mp-edit-confirm" class="modal-data">
+              </div>
+            </div>
+            <h3 class="modal-section-title" style="color: red;">Danger Zone</h3>
+            <div class="modal-field-group">
+              <div class="modal-field">
+                <button class="delete_btn"><i class="fas fa-triangle-exclamation"></i> Change master password</button>
               </div>
             </div>
       </div>
@@ -114,6 +156,7 @@
             <button class="edit_btn"><i class="fas fa-pen"></i> Save</button>
             <a href="/settings"><button class="cancel_btn"><i class="fas fa-x"></i> Cancel</button></a>
           </div> 
+      </div>
       </div>
 
       <script>
@@ -151,6 +194,10 @@
            field.addEventListener("keydown", (e) => {
            
              if (e.key === "Enter") {
+              editableFields.forEach((field) => {
+                console.log(field.innerText);
+              })
+
                e.preventDefault(); 
                field.blur(); 
                toggleModal('#confirmation_modal');
@@ -191,6 +238,7 @@
                 const passwords_section = document.getElementById('main-generate-password');
                 const password_btn = document.getElementById('passwords_btn');
                 const username_btn = document.getElementById('usernames_btn');
+                const editableFields = document.querySelectorAll(".modal-data-create[data-editable='true']");
 
                 password_btn.addEventListener('click', () => {
                   users_section.style.display = 'none';
@@ -203,5 +251,8 @@
                 });
             })
         </script>
+
+        <script src="../controllers/env.js"></script>
+        <script type="module" src="../controllers/user_controllers.js"></script>
 </body>
 </html>

@@ -4,11 +4,9 @@ const jwt = require('jsonwebtoken');
 const User = require('../models/user');
 const privateKey = process.env.JWT_PRIVATE_KEY;
 
-
 function generateJWT(user) {
     const payload = {
         sub: user.email,
-        name: user.username,
         iat: Math.floor(Date.now() / 1000),
         exp: Math.floor(Date.now() / 1000) + 15 * 60
     };
@@ -69,12 +67,55 @@ exports.login = async (req, res) => {
                     sameSite: 'Strict',
                     maxAge: 15 * 60 * 1000
                 });
-                return res.status(200).send('Login successful');
+                return res.status(200).json({
+                    username: user.username,
+                    email: user.email,
+                    salt: user.salt
+                });
             } else {
                 return res.status(400).send('Username or password is incorrect. Try again');
             }
         }
     } catch (err) {
         return res.sendStatus(500);
+    }
+}
+
+exports.updateUser = async (req, res) => {
+    const email = req.user;
+
+    if (req.headers['auth_hash']) {
+        const { auth_hash: authHashHex } = req.body;
+
+        try {
+            const user = await User.findOne({ email });
+    
+            if (!user) {
+                return res.status(400).send('Username or password is incorrect. Try again');
+            } else {
+                const recvHash = Buffer.from(authHashHex, 'hex');
+                const storedHash = Buffer.from(user.auth_hash, 'hex');
+    
+                if (recvHash.length !== storedHash.length) {
+                    return res.status(400).send('Master password is not correct');
+                }
+    
+                if (crypto.timingSafeEqual(recvHash, storedHash)) {
+                    if (req.body.username.length && req.body.email.length) {
+                        
+                    } else if (req.body.email.length) {
+
+                    } else {
+
+                    }
+                } else {
+                    return res.status(400).send('master password is not correct');
+                }
+            }
+        } catch (err) {
+            return res.sendStatus(500);
+        }
+    } else {
+
     }
 }

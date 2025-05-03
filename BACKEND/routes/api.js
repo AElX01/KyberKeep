@@ -15,7 +15,7 @@ function authenticateRequest(req, res, next) {
         const token = req.cookies.jwt;
 
         if (!token) {
-            return res.status(401).send('Unauthorized: No token provided');
+            return res.redirect('/login');
         }
             const decoded = jwt.verify(token, privateKey);
             req.user = decoded;
@@ -33,9 +33,10 @@ routerApi.use('/icon', express.static(path.join(__dirname, '/../../FRONTEND/asse
 routerApi.use('/users', usersRouter);
 
 routerApi.get('/', authenticateRequest,(req, res) => res.sendFile(path.resolve(__dirname+"/../../FRONTEND/views/vaults.html")));
-routerApi.get('/settings', (req, res) => res.sendFile(path.resolve(__dirname+"/../../FRONTEND/views/settings.html")));
+routerApi.get('/settings', authenticateRequest, (req, res) => res.sendFile(path.resolve(__dirname+"/../../FRONTEND/views/settings.html")));
 routerApi.get('/login', (req, res) => res.sendFile(path.resolve(__dirname+"/../../FRONTEND/views/login.html")));
 routerApi.get('/register', (req, res) => res.sendFile(path.resolve(__dirname+"/../../FRONTEND/views/register.html")));
-routerApi.get('/generator', (req, res) => res.sendFile(path.resolve(__dirname+"/../../FRONTEND/views/generator.html")));
+routerApi.get('/generator', authenticateRequest, (req, res) => res.sendFile(path.resolve(__dirname+"/../../FRONTEND/views/generator.html")));
+routerApi.get('/banners', (req, res) => res.sendFile(path.resolve(__dirname+"/../../FRONTEND/views/banners.html")));
 
 module.exports = routerApi;
