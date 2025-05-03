@@ -1,3 +1,3 @@
-function register_user() {
-    
+function populate_user_info() {
+
 }
