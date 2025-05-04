@@ -91,6 +91,7 @@ async function register_user(event) {
             .then(user => {
                 sessionStorage.setItem('username', user.username);
                 sessionStorage.setItem('email', user.email);
+                sessionStorage.setItem('salt', user.salt);
                 window.location.href = '/';
             })
         }

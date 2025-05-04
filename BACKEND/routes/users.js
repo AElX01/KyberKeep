@@ -61,4 +61,6 @@ routerUsers.get('/salt', usersController.getSalt);
 
 routerUsers.patch('/update', authenticateRequest, usersController.updateUser);
 
+routerUsers.delete('/delete', authenticateRequest, usersController.deleteUser);
+
 module.exports = routerUsers;

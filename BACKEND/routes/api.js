@@ -37,6 +37,5 @@ routerApi.get('/settings', authenticateRequest, (req, res) => res.sendFile(path.
 routerApi.get('/login', (req, res) => res.sendFile(path.resolve(__dirname+"/../../FRONTEND/views/login.html")));
 routerApi.get('/register', (req, res) => res.sendFile(path.resolve(__dirname+"/../../FRONTEND/views/register.html")));
 routerApi.get('/generator', authenticateRequest, (req, res) => res.sendFile(path.resolve(__dirname+"/../../FRONTEND/views/generator.html")));
-routerApi.get('/banners', (req, res) => res.sendFile(path.resolve(__dirname+"/../../FRONTEND/views/banners.html")));
 
 module.exports = routerApi;
