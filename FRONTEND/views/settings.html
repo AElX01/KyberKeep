@@ -105,7 +105,7 @@
             <button type="submit" class="edit_btn" style="margin-bottom: 1rem;"><i class="fas fa-pen"></i> Edit account</button>
             <div class="modal-field-group">
               <div class="modal-field">
-                <button class="delete_btn"><i class="fas fa-trash"></i> Delete account</button>
+                <button type="button" onclick="toggleModal('#delete_user_modal')" class="delete_btn"><i class="fas fa-trash"></i> Delete account</button>
               </div>
             </div>
           </form>
@@ -159,6 +159,28 @@
             <a href="/settings"><button class="cancel_btn"><i class="fas fa-x"></i> Cancel</button></a>
           </div> 
       </div>
+      </div>
+
+      <div id="delete_user_modal" class="modal-overlay" style="display: none;"> 
+        <div class="modal-content">
+          <button class="modal-close">&times;</button>
+      
+          <div class="modal-header">
+            <h2 class="modal-title">Input master password</h2>
+          </div>
+      
+          <form id="new_login_form">
+            <div class="modal-field">
+              <label>Master password</label>
+              <input name="password" type="password" class="modal-data">
+            </div>
+          
+            <div class="modal-actions">
+              <a href="/settings"><button type="button" class="cancel_btn"><i class="fas fa-x"></i> Cancel</button></a>
+              <button type="submit" class="delete_btn"><i class="fas fa-trash"></i> Delete</button>
+            </div>
+          </form>
+        </div>
       </div>
 
       <script>
@@ -252,6 +274,30 @@
                   users_section.style.removeProperty('display');
                 });
             })
+        </script>
+
+        <script>
+          document.addEventListener("DOMContentLoaded", () => {
+            const closeModalButtons = document.querySelectorAll(".modal-close");
+            const modals = document.querySelectorAll(".modal-overlay");
+          
+            closeModalButtons.forEach((button) => {
+              button.addEventListener("click", () => {
+                const modal = button.closest(".modal-overlay");
+                if (modal) {
+                  modal.style.display = "none"; 
+                }
+              });
+            });
+          
+            modals.forEach((modal) => {
+              modal.addEventListener("click", (event) => {
+                if (event.target === modal) {
+                  modal.style.display = "none";
+                }
+              });
+            });
+          });
         </script>
 
         <script src="../controllers/env.js"></script>

@@ -49,13 +49,13 @@ exports.login = async (req, res) => {
         const user = await User.findOne({ email });
 
         if (!user) {
-            return res.status(400).send('Username or password is incorrect');
+            return res.status(401).send('Username or password is incorrect');
         } else {
             const recvHash = Buffer.from(authHashHex, 'hex');
             const storedHash = Buffer.from(user.auth_hash, 'hex');
 
             if (recvHash.length !== storedHash.length) {
-                return res.status(400).send('Username or password is incorrect');
+                return res.status(401).send('Username or password is incorrect');
             }
 
             if (crypto.timingSafeEqual(recvHash, storedHash)) {
@@ -83,6 +83,7 @@ exports.login = async (req, res) => {
 
 exports.updateUser = async (req, res) => {
     const { sub: email } = req.user;
+
 
     if (req.headers['auth_hash']) {
         const authHashHex = req.headers['auth_hash'];
@@ -185,7 +186,7 @@ exports.updateUser = async (req, res) => {
                         console.log(req.body.auth_hash, req.body.salt);
                     }
                 } else {
-                    return res.status(400).send('master password is not correct');
+                    return res.status(401).send('master password is not correct');
                 }
             }
         } catch (err) {
@@ -202,10 +203,26 @@ exports.deleteUser = async (req, res) => {
 
     try {
         let user = await User.findOne({ email });
-        const result = await collection.deleteOne({ email: email });
-    } catch (err) {
-        return res.status(400).send('could not eliminate user');
+        if (!req.headers['auth_hash']) {
+            return res.sendStatus(401);
+        }
+
+        const authHashHex = req.headers['auth_hash'];
+        const recvHash = Buffer.from(authHashHex, 'hex');
+        const storedHash = Buffer.from(user.auth_hash, 'hex');
+        
+        if (recvHash.length !== storedHash.length) {
+            return res.status(401).send('Master password is not correct');
+        }
+
+        if (crypto.timingSafeEqual(recvHash, storedHash)) {
+            const result = await User.deleteOne({ email: email });
+            return res.sendStatus(200);
+        } else {
+            res.status(401).send('Master password is not correct');
+        }
+    } catch(err) {
+        console.log(err);
+        return res.sendStatus(500);
     }
-
-
 }

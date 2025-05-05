@@ -166,6 +166,41 @@ async function update_user_info(event) {
     }
 }
 
+async function delete_user(event) {
+    event.preventDefault();
+
+    const formData = new FormData(event.target);
+    const formObject = Object.fromEntries(formData.entries());
+
+    if (formObject.password.length < 8) {
+        alert('Incorrect Password Length', 'insufficient password length');
+        return;
+    }
+
+    const masterPassword = formObject.password;
+
+    await init();
+    const masterKey = derive_key_from_master_password_with_defined_salt(masterPassword, sessionStorage.salt);
+    const challenge = masterKey + 'authentication';
+    const hmac = generate_auth_hmac(masterKey, challenge);
+
+    fetch('/users/delete', {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json', 'auth_hash': hmac },
+        body: JSON.stringify({
+            "email": formObject.email
+        })
+    })
+    .then(async response => {
+        if (!response.ok) {
+            const errorText = await response.text();
+            alert('something went wrong')
+            return;
+        } else {
+            window.location.href = local_url + 'users/logout';
+        }
+    })
+}
 
 if (window.location.href === local_url + 'settings') {
     let username = document.getElementById('modal-edit-username');
@@ -173,6 +208,7 @@ if (window.location.href === local_url + 'settings') {
 
     document.getElementById('edit-user-info-form').addEventListener('submit', update_user_info);
     document.getElementById('change-master-password-form').addEventListener('submit', update_password);
+    document.getElementById('delete_user_modal').addEventListener('submit', delete_user);
 }
 
 populate_user_info();
