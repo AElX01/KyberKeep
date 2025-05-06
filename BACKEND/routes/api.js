@@ -6,7 +6,7 @@ const cookieParser = require('cookie-parser');
 const usersRouter = require('./users');
 const jwt = require('jsonwebtoken');
 const routerApi = express.Router();
-const routerUsers = express.Router();
+const vaultsRouter = require('./vaults');
 
 
 
@@ -31,6 +31,7 @@ routerApi.use('/css', express.static(path.join(__dirname, '/../../FRONTEND/asset
 routerApi.use('/js', express.static(path.join(__dirname, '/../../FRONTEND/controllers/js')));
 routerApi.use('/icon', express.static(path.join(__dirname, '/../../FRONTEND/assets/icon')));
 routerApi.use('/users', usersRouter);
+routerApi.use('/vaults', vaultsRouter);
 
 routerApi.get('/', authenticateRequest,(req, res) => res.sendFile(path.resolve(__dirname+"/../../FRONTEND/views/vaults.html")));
 routerApi.get('/settings', authenticateRequest, (req, res) => res.sendFile(path.resolve(__dirname+"/../../FRONTEND/views/settings.html")));

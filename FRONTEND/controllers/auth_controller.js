@@ -52,7 +52,7 @@ async function register_user(event) {
     const masterSalt = masterMetadata.slice(0, 32);
     const challenge = masterKey + 'authentication';
     const hmac = generate_auth_hmac(masterKey, challenge);
-    // const symmetricKey = derive_key_from_master_password(masterKey, 1); may not need to generate it here
+    const symmetricKey = derive_key_from_master_password_with_defined_salt(masterKey, masterSalt);
     
     fetch('/users/register', {
         method: 'POST',
@@ -92,6 +92,7 @@ async function register_user(event) {
                 sessionStorage.setItem('username', user.username);
                 sessionStorage.setItem('email', user.email);
                 sessionStorage.setItem('salt', user.salt);
+                sessionStorage.setItem('vault_key', symmetricKey);
                 window.location.href = '/';
             })
         }
@@ -146,9 +147,15 @@ async function login(event) {
             return response.json();
         })
         .then(user => {
+            if (!user) {
+                return;
+            }
             sessionStorage.setItem('username', user.username);
             sessionStorage.setItem('email', user.email);
             sessionStorage.setItem('salt', user.salt);
+
+            const symmetricKey = derive_key_from_master_password_with_defined_salt(masterKey, salt);
+            sessionStorage.setItem('vault_key', symmetricKey);
             window.location.href = '/';
         })
     })

@@ -1,7 +1,8 @@
 import init, { 
     derive_key_from_master_password, 
     generate_auth_hmac,
-    derive_key_from_master_password_with_defined_salt
+    derive_key_from_master_password_with_defined_salt,
+    chacha20poly1305_decrypt
  } from "/cryptography/cryptography_rs.js";
 
 
@@ -27,13 +28,77 @@ function showErrorBanner(context, description) {
     }, 3000);
 }
 
-function populate_user_info() {
+async function populate_user_info() {
     let username = document.getElementById('nav-footer-title');
     let user_email = document.getElementById('nav-footer-subtitle');
+    let reused_passwords = document.getElementById('reused_passwords');
+    let insecure_sites = document.getElementById('insecure_sites');
+    let account_health = document.getElementById('account_health');
 
     username.innerText = sessionStorage.username;
     user_email.innerText = sessionStorage.email;
+
+    fetch('/vaults/getvault/all', {
+        method: "GET",
+    })
+    .then(async response => {
+        if (!response.ok) {
+            const errorText = await response.text();
+            alert('Something went wrong');
+            return;
+        }
+        return response.json();
+    })
+    .then(async vaults => {
+        await init();
+
+        let passwords = [];
+        let reused = 0;
+        let insecure = 0;
+
+        if (vaults.entries.length === 0) {
+            reused_passwords.innerHTML = `<strong>Reused Passwords:</strong> 0`;
+            insecure_sites.innerHTML = `<strong>Insecure Sites:</strong> 0`;
+            account_health.innerHTML = `You do not have any passwords yet`;
+            return;
+        }
+
+        let reusedIndices = new Set();
+        let insecureIndices = new Set();
+
+        for (let i = 0; i < vaults.entries.length; i++) {
+            const info = vaults.entries[i];
+
+            if (info.url.startsWith("http://")) {
+                insecure += 1;
+                insecureIndices.add(i);
+            }
+
+            const decrypted = chacha20poly1305_decrypt(sessionStorage.vault_key, info.encrypted_data);
+            passwords.push(decrypted);
+        }
+
+        let seen = new Map();
+        for (let i = 0; i < passwords.length; i++) {
+            const pw = passwords[i];
+            if (seen.has(pw)) {
+                reusedIndices.add(i);
+                reusedIndices.add(seen.get(pw)); 
+            } else {
+                seen.set(pw, i);
+            }
+        }
+        reused = reusedIndices.size;
+
+        let totalAtRisk = new Set([...reusedIndices, ...insecureIndices]);
+        let atRiskPercentage = ((totalAtRisk.size / passwords.length) * 100).toFixed(2);
+
+        reused_passwords.innerHTML = `<strong>Reused Passwords:</strong> ${reused}`;
+        insecure_sites.innerHTML = `<strong>Insecure Sites:</strong> ${insecure}`;
+        account_health.innerHTML = `<strong>${atRiskPercentage}%</strong> of your passwords are at risk`;
+    });
 }
+
 
 async function update_password(event) {
     event.preventDefault();
@@ -203,6 +268,10 @@ async function delete_user(event) {
 }
 
 if (window.location.href === local_url + 'settings') {
+    if (sessionStorage.getItem('email') == null) {
+        window.location.href = local_url + 'users/logout';
+    }
+    
     let username = document.getElementById('modal-edit-username');
     username.placeholder = sessionStorage.username;
 

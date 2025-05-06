@@ -3,6 +3,7 @@ const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
 const User = require('../models/user');
 const privateKey = process.env.JWT_PRIVATE_KEY;
+const Vault = require('../models/vaults');
 
 function generateJWT(user) {
     const payload = {
@@ -30,13 +31,18 @@ exports.getSalt = async (req, res) => {
     }
 }
 
-exports.registerAccount = async (req, res) => {
+exports.registerAccount = async (req, res, next) => {
     const { username, email, auth_hash, salt, iterations } = req.body;
 
     try {
+        const sample = await User.findOne({ email });
+        if (sample) {
+            return res.sendStatus(400).send('could not create your account');
+        }
+
         const user = new User({ username, email, auth_hash, salt, iterations });
         await user.save();
-        return res.sendStatus(201);
+        next();
     } catch (err) {
         return res.status(400).send('could not create user account');
     }
@@ -216,7 +222,8 @@ exports.deleteUser = async (req, res) => {
         }
 
         if (crypto.timingSafeEqual(recvHash, storedHash)) {
-            const result = await User.deleteOne({ email: email });
+            const deleted_user = await User.deleteOne({ email: email });
+            const deleted_vault = await Vault.deleteOne({ email: email });
             return res.sendStatus(200);
         } else {
             res.status(401).send('Master password is not correct');

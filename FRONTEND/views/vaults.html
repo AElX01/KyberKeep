@@ -32,9 +32,9 @@
             <label for="nav-footer-toggle"><i class="fas fa-caret-up"></i></label>
           </div>
           <div id="nav-footer-content">
-            <p><strong>Reused Passwords:</strong> 0</p>
-            <p><strong>Insecure Sites:</strong> 0</p><br>
-            <p>Your passwords are <strong>highly protected!</strong></p>
+            <p id="reused_passwords"></p>
+            <p id="insecure_sites"><br>
+            <p id="account_health"></p>
           </div>
         </div>
       </div>
@@ -46,75 +46,30 @@
 
             <div class="vault-info">
               <div class="vault-title">GitHub</div>
-              <div class="vault-meta">AElX01</div>
+              <div class="vault-meta">github.com</div>
             </div>
           
             <div class="vault-actions">
               <button><i class="fas fa-up-right-from-square"></i></button>
-              <button><i class="fas fa-clone"></i></button>
+              <button><i class="fas fa-ellipsis-vertical"></i></button>
               
             </div>
-          </div>   
+          </div>  
           
           <div class="vault-card">
-            <img class="vault-icon" src="https://www.google.com/s2/favicons?domain=hackthebox.com" alt="HackTheBox" />
+            <img class="vault-icon" src="https://www.google.com/s2/favicons?domain=github.com" alt="GitHub" />
 
             <div class="vault-info">
-              <div class="vault-title">HackTheBox</div>
-              <div class="vault-meta">daniel.canul@iteso.mx</div>
+              <div class="vault-title">Sample</div>
+              <div class="vault-meta">github.com</div>
             </div>
           
             <div class="vault-actions">
               <button><i class="fas fa-up-right-from-square"></i></button>
-              <button><i class="fas fa-clone"></i></button>
+              <button><i class="fas fa-ellipsis-vertical"></i></button>
               
             </div>
-          </div> 
-
-          <div class="vault-card">
-            <img class="vault-icon" src="https://www.google.com/s2/favicons?domain=proton.me" alt="ProtonMail" />
-
-            <div class="vault-info">
-              <div class="vault-title">ProtonMail</div>
-              <div class="vault-meta">ncat@proton.me</div>
-            </div>
-          
-            <div class="vault-actions">
-              <button><i class="fas fa-up-right-from-square"></i></button>
-              <button><i class="fas fa-clone"></i></button>
-              
-            </div>
-          </div>
-
-          <div class="vault-card">
-            <img class="vault-icon" src="https://www.google.com/s2/favicons?domain=iteso.mx" alt="iteso" />
-
-            <div class="vault-info">
-              <div class="vault-title">iteso</div>
-              <div class="vault-meta">daniel.canul@iteso.mx</div>
-            </div>
-          
-            <div class="vault-actions">
-              <button><i class="fas fa-up-right-from-square"></i></button>
-              <button><i class="fas fa-clone"></i></button>
-              
-            </div>
-          </div>
-
-          <div class="vault-card">
-            <img class="vault-icon" src="https://www.google.com/s2/favicons?domain=instagram.com" alt="Instagram" />
-
-            <div class="vault-info">
-              <div class="vault-title">Instagram</div>
-              <div class="vault-meta">Alcasec</div>
-            </div>
-          
-            <div class="vault-actions">
-              <button><i class="fas fa-up-right-from-square"></i></button>
-              <button><i class="fas fa-clone"></i></button>
-              
-            </div>
-          </div>
+          </div>  
         </div>
 
 
@@ -185,18 +140,18 @@
             <h2 class="modal-title">New Login</h2>
           </div>
       
-          <form id="new_login_form">
+          <form id="create_password_form">
             <h3 class="modal-section-title">Item details</h3>
             <div class="modal-field">
               <label>Item name</label>
-              <input class="modal-data">
+              <input name="name" class="modal-data">
             </div>
 
             <h3 class="modal-section-title">Login information</h3>
             <div class="modal-field-group">
               <div class="modal-field">
                 <label>Username</label>
-                <input class="modal-data" placeholder="github.com">
+                <input name="username" class="modal-data" placeholder="github.com">
               </div>
               <button type="button" class="modal_cpy_btn"><i class="fas fa-arrows-rotate"></i></button>
             </div>
@@ -204,7 +159,7 @@
             <div class="modal-field-group">
               <div class="modal-field">
                 <label>Password</label>
-                <input class="modal-data" placeholder="github.com">
+                <input name="password" type="password" class="modal-data" placeholder="github.com">
               </div>
               <button type="button" class="modal_cpy_btn"><i class="fas fa-eye-slash"></i></button>
               <button type="button" class="modal_cpy_btn"><i class="fas fa-arrows-rotate"></i></button>
@@ -215,7 +170,7 @@
             <div class="modal-field-group">
               <div class="modal-field">
                 <label>Website</label>
-                <input class="modal-data" placeholder="github.com">
+                <input name="website" class="modal-data" placeholder="github.com">
               </div>
             </div>
           
@@ -337,6 +292,6 @@
 
     <script src="../controllers/env.js"></script>
     <script type="module" src="../controllers/user_controllers.js"></script>
-
+    <script type="module" src="../controllers/password_controllers.js"></script>
 </body>
 </html>
