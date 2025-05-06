@@ -91,145 +91,151 @@ exports.login = async (req, res) => {
 exports.updateUser = async (req, res) => {
     const { id: id, sub: email } = req.user;
 
+    try {
 
-    if (req.headers['auth_hash']) {
-        const authHashHex = req.headers['auth_hash'];
+        if (req.headers['auth_hash']) {
+            const authHashHex = req.headers['auth_hash'];
 
-        try {
-            const newEmail = req.body.email;
-            let user = await User.findById(id);
-            let repeated = await User.findOne({ newEmail });
-            if (repeated) {
-                return res.status(400).send('cannot update with this email');
-            }
-    
-            if (!user) {
-                return res.status(400).send('Username or password is incorrect');
-            } else {
-                const recvHash = Buffer.from(authHashHex, 'hex');
-                const storedHash = Buffer.from(user.auth_hash, 'hex');
-    
-                if (recvHash.length !== storedHash.length) {
-                    return res.status(400).send('Master password is not correct');
-                }
-    
-                if (crypto.timingSafeEqual(recvHash, storedHash)) {
-                    if (req.body.username === undefined && req.body.email === undefined) {
-                        user = await User.findOneAndUpdate(
-                            { _id: id },
-                            { 
-                                auth_hash: req.body.auth_hash,
-                                salt: req.body.salt
-
-                            },
-                            { new: true }
-                        )
-
-                        const token = generateJWT(user);
-
-                        res.cookie('jwt', token, { // HTTP-Only Cookie
-                            httpOnly: true,
-                            secure: false, // TESTING PURPOSES, SERVE THE COOKIE VIA HTTPS
-                            sameSite: 'Strict',
-                            maxAge: 15 * 60 * 1000
-                        });
-                        res.status(200).json({
-                            email: user.email,
-                            username: user.username,
-                            salt: user.salt
-                        });
-
-                        return;
-                    }
-
-                    if (req.body.username.length && req.body.email.length) {
-
-                        user = await User.findOneAndUpdate(
-                            { _id: id },
-                            { 
-                                email: req.body.email,
-                                username: req.body.username
-
-                            },
-                            { new: true }
-                        )
-
-                        let vault = await Vault.findOneAndUpdate(
-                            { email },
-                            {
-                                email: req.body.email,
-                            },
-                            { new: true }
-                        );
-
-                        const token = generateJWT(user);
-
-                        res.cookie('jwt', token, { // HTTP-Only Cookie
-                            httpOnly: true,
-                            secure: false, // TESTING PURPOSES, SERVE THE COOKIE VIA HTTPS
-                            sameSite: 'Strict',
-                            maxAge: 15 * 60 * 1000
-                        });
-                        res.status(200).json({
-                            email: user.email,
-                            username: user.username,
-                            salt: user.salt
-                        });
-
-                        return;
-                    } else if (req.body.email.length) {
-                        user = await User.findOneAndUpdate(
-                            { _id: id },
-                            { 
-                                email: req.body.email,
-
-                            },
-                            { new: true }
-                        );
-
-                        let vault = await Vault.findOneAndUpdate(
-                            { email },
-                            {
-                                email: req.body.email,
-                            },
-                            { new: true }
-                        );
-
-                        const token = generateJWT(user);
-
-                        res.cookie('jwt', token, { // HTTP-Only Cookie
-                            httpOnly: true,
-                            secure: false, // TESTING PURPOSES, SERVE THE COOKIE VIA HTTPS
-                            sameSite: 'Strict',
-                            maxAge: 15 * 60 * 1000
-                        });
-                        return res.status(200).json({
-                            email: user.email,
-                            username: user.username,
-                            salt: user.salt
-                        });
-                    } 
+                const newEmail = req.body.email;
+                let user = await User.findById(id);
+        
+                if (!user) {
+                    return res.status(400).send('Username or password is incorrect');
                 } else {
-                    return res.status(401).send('master password is not correct');
-                }
-            }
-        } catch (err) {
-            return res.sendStatus(500);
-        }
-    } else {
-        user = await User.findOneAndUpdate(
-            { _id: id },
-            { 
-                username: req.body.username
+                    const recvHash = Buffer.from(authHashHex, 'hex');
+                    const storedHash = Buffer.from(user.auth_hash, 'hex');
+        
+                    if (recvHash.length !== storedHash.length) {
+                        return res.status(400).send('Master password is not correct');
+                    }
+        
+                    if (crypto.timingSafeEqual(recvHash, storedHash)) {
+                        if (req.body.username === undefined && req.body.email === undefined) {
+                            user = await User.findOneAndUpdate(
+                                { email },
+                                { 
+                                    auth_hash: req.body.auth_hash,
+                                    salt: req.body.salt
 
-            },
-            { new: true }
-        )
-        return res.status(200).json({
-            email: user.email,
-            username: user.username,
-            salt: user.salt
-        });
+                                },
+                                { new: true }
+                            )
+
+                            const token = generateJWT(user);
+
+                            res.cookie('jwt', token, { // HTTP-Only Cookie
+                                httpOnly: true,
+                                secure: false, // TESTING PURPOSES, SERVE THE COOKIE VIA HTTPS
+                                sameSite: 'Strict',
+                                maxAge: 15 * 60 * 1000
+                            });
+                            res.status(200).json({
+                                email: user.email,
+                                username: user.username,
+                                salt: user.salt
+                            });
+
+                            return;
+                        }
+
+                        if (req.body.username.length && req.body.email.length) {
+                            let repeated = await User.findOne({ newEmail });
+                            if (repeated) {
+                                return res.status(400).send('cannot update with this email');
+                            }
+
+                            user = await User.findOneAndUpdate(
+                                { _id: id },
+                                { 
+                                    email: req.body.email,
+                                    username: req.body.username
+
+                                },
+                                { new: true }
+                            )
+
+                            let vault = await Vault.findOneAndUpdate(
+                                { email },
+                                {
+                                    email: req.body.email,
+                                },
+                                { new: true }
+                            );
+
+                            const token = generateJWT(user);
+
+                            res.cookie('jwt', token, { // HTTP-Only Cookie
+                                httpOnly: true,
+                                secure: false, // TESTING PURPOSES, SERVE THE COOKIE VIA HTTPS
+                                sameSite: 'Strict',
+                                maxAge: 15 * 60 * 1000
+                            });
+                            res.status(200).json({
+                                email: user.email,
+                                username: user.username,
+                                salt: user.salt
+                            });
+
+                            return;
+                        } else if (req.body.email.length) {
+                            let repeated = await User.findOne({ newEmail });
+                            if (repeated) {
+                                return res.status(400).send('cannot update with this email');
+                            }
+
+                            user = await User.findOneAndUpdate(
+                                { _id: id },
+                                { 
+                                    email: req.body.email,
+
+                                },
+                                { new: true }
+                            );
+
+                            let vault = await Vault.findOneAndUpdate(
+                                { email },
+                                {
+                                    email: req.body.email,
+                                },
+                                { new: true }
+                            );
+
+                            const token = generateJWT(user);
+
+                            res.cookie('jwt', token, { // HTTP-Only Cookie
+                                httpOnly: true,
+                                secure: false, // TESTING PURPOSES, SERVE THE COOKIE VIA HTTPS
+                                sameSite: 'Strict',
+                                maxAge: 15 * 60 * 1000
+                            });
+                            return res.status(200).json({
+                                email: user.email,
+                                username: user.username,
+                                salt: user.salt
+                            });
+                        } 
+                    } else {
+                        return res.status(401).send('master password is not correct');
+                    }
+                }
+        
+        } else {
+            user = await User.findOneAndUpdate(
+                { _id: id },
+                { 
+                    username: req.body.username
+
+                },
+                { new: true }
+            )
+            return res.status(200).json({
+                email: user.email,
+                username: user.username,
+                salt: user.salt
+            });
+        }
+    } catch (err) {
+        res.sendStatus(500);
     }
 }
 

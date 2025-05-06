@@ -34,7 +34,8 @@ async function populate_user_info() {
     let reused_passwords = document.getElementById('reused_passwords');
     let insecure_sites = document.getElementById('insecure_sites');
     let account_health = document.getElementById('account_health');
-
+    
+    loaderContainer.classList.remove("hidden");
     username.innerText = sessionStorage.username;
     user_email.innerText = sessionStorage.email;
 
@@ -45,6 +46,7 @@ async function populate_user_info() {
         if (!response.ok) {
             const errorText = await response.text();
             alert('Something went wrong');
+            loaderContainer.classList.add("hidden");
             return;
         }
         return response.json();
@@ -60,6 +62,7 @@ async function populate_user_info() {
             reused_passwords.innerHTML = `<strong>Reused Passwords:</strong> 0`;
             insecure_sites.innerHTML = `<strong>Insecure Sites:</strong> 0`;
             account_health.innerHTML = `You do not have any passwords yet`;
+            loaderContainer.classList.add("hidden");
             return;
         }
 
@@ -93,6 +96,7 @@ async function populate_user_info() {
         let totalAtRisk = new Set([...reusedIndices, ...insecureIndices]);
         let atRiskPercentage = ((totalAtRisk.size / passwords.length) * 100).toFixed(2);
 
+        loaderContainer.classList.add("hidden");
         reused_passwords.innerHTML = `<strong>Reused Passwords:</strong> ${reused}`;
         insecure_sites.innerHTML = `<strong>Insecure Sites:</strong> ${insecure}`;
         account_health.innerHTML = `<strong>${atRiskPercentage}%</strong> of your passwords are at risk`;
@@ -113,6 +117,7 @@ async function update_password(event) {
         alert('Password mismatch', 'passwords do not match');
         return;
     }
+    loaderContainer.classList.remove("hidden");
 
     // Get the master password from the form
     const masterPassword = formObject.current_password;
@@ -139,12 +144,14 @@ async function update_password(event) {
     .then(async response => {
         if (!response.ok) {
             const errorText = await response.text();
-            alert('something went wrong')
+            alert('something went wrong');
+            loaderContainer.classList.add("hidden");
             return;
         }
         return response.json();
     })
     .then(user => {
+        loaderContainer.classList.add("hidden");
         sessionStorage.setItem('username', user.username);
         sessionStorage.setItem('email', user.email);
         sessionStorage.setItem('salt', user.salt);
@@ -157,18 +164,19 @@ async function update_user_info(event) {
 
     const formData = new FormData(event.target);
     const formObject = Object.fromEntries(formData.entries());
-    console.log(formObject);
+    loaderContainer.classList.remove("hidden");
 
     if (!(formObject.username.length || formObject.email.length)) {
+        loaderContainer.classList.add('hidden');
         alert('no changes');
         return;
     } else if (formObject.username.length && formObject.email.length) {
         if (!formObject.password.length) {
-            alert('no master password provided');
+            loaderContainer.classList.add("hidden");
+            alert('something went wrong');
             return;
         } else {
             const masterPassword = formObject.password;
-
             await init();
             const masterKey = derive_key_from_master_password_with_defined_salt(masterPassword, sessionStorage.salt);
             const challenge = masterKey + 'authentication';
@@ -185,13 +193,15 @@ async function update_user_info(event) {
             .then(async response => {
                 if (!response.ok) {
                     const errorText = await response.text();
-                    alert('something went wrong')
+                    loaderContainer.classList.add("hidden");
+                    alert('something went wrong');
                     return;
                 }
     
                 return response.json();
             })
             .then(user => {
+                loaderContainer.classList.add("hidden");
                 sessionStorage.setItem('username', user.username);
                 sessionStorage.setItem('email', user.email);
                 sessionStorage.setItem('salt', user.salt);
@@ -209,13 +219,15 @@ async function update_user_info(event) {
             .then(async response => {
                 if (!response.ok) {
                     const errorText = await response.text();
-                    alert('something went wrong')
+                    loaderContainer.classList.add("hidden");
+                    alert('something went wrong');
                     return;
                 }
     
                 return response.json();
             })
             .then(user => {
+                loaderContainer.classList.add("hidden");
                 sessionStorage.setItem('username', user.username);
                 sessionStorage.setItem('email', user.email);
                 sessionStorage.setItem('salt', user.salt);
@@ -223,7 +235,8 @@ async function update_user_info(event) {
             })
     } else if (formObject.email.length) {
         if (!formObject.password.length) {
-            alert('no master password provided');
+            loaderContainer.classList.add("hidden");
+            alert('something went wrong');
             return;
         } else {
             const masterPassword = formObject.password;
@@ -244,13 +257,15 @@ async function update_user_info(event) {
             .then(async response => {
                 if (!response.ok) {
                     const errorText = await response.text();
-                    alert('something went wrong')
+                    loaderContainer.classList.add("hidden");
+                    alert('something went wrong');
                     return;
                 }
     
                 return response.json();
             })
             .then(user => {
+                loaderContainer.classList.add("hidden");
                 sessionStorage.setItem('username', user.username);
                 sessionStorage.setItem('email', user.email);
                 sessionStorage.setItem('salt', user.salt);
@@ -271,6 +286,7 @@ async function delete_user(event) {
         return;
     }
 
+    loaderContainer.classList.remove("hidden");
     const masterPassword = formObject.password;
 
     await init();
@@ -288,9 +304,11 @@ async function delete_user(event) {
     .then(async response => {
         if (!response.ok) {
             const errorText = await response.text();
-            alert('something went wrong')
+            loaderContainer.classList.add("hidden");
+            alert('something went wrong');
             return;
         } else {
+            loaderContainer.classList.add("hidden");
             window.location.href = local_url + 'users/logout';
         }
     })

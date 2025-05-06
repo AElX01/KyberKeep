@@ -34,7 +34,10 @@
             </div>
         
             <div>
-              <button type="submit" class="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Log in with your master password</button>
+              <button
+              type="submit"
+              class="relative flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Log in with your master password</button>
+
             </div>
           </form>
       
@@ -78,6 +81,19 @@
       </div>
     </div>
 
+    <div id="loader" class="loader-container hidden">
+      <div class="loader">
+        <div class="square" id="sq1"></div>
+        <div class="square" id="sq2"></div>
+        <div class="square" id="sq3"></div>
+        <div class="square" id="sq4"></div>
+        <div class="square" id="sq5"></div>
+        <div class="square" id="sq6"></div>
+        <div class="square" id="sq7"></div>
+        <div class="square" id="sq8"></div>
+        <div class="square" id="sq9"></div>
+    </div>
+  
     <script src="../controllers/env.js"></script>
     <script type="module" src="../controllers/auth_controller.js"></script>
 </body>

@@ -32,7 +32,7 @@ async function register_user(event) {
 
     const formData = new FormData(event.target);
     const formObject = Object.fromEntries(formData.entries());
-    console.log('Form data:', JSON.stringify(formObject));
+    
 
     if (formObject.password.length < 8) {
         showErrorBanner('Incorrect Password Length', 'insufficient password length');
@@ -41,6 +41,8 @@ async function register_user(event) {
         showErrorBanner('Password mismatch', 'passwords do not match');
         return;
     }
+
+    loaderContainer.classList.remove("hidden");
 
     // Get the master password from the form
     const masterPassword = formObject.password;
@@ -69,6 +71,7 @@ async function register_user(event) {
         if (!response.ok) {
             const errorText = await response.text();
             showErrorBanner('something went wrong', errorText);
+            loaderContainer.classList.add("hidden");
             return;
         } else {
             fetch('/users/login', {
@@ -83,12 +86,14 @@ async function register_user(event) {
                 if (!response.ok) {
                     const errorText = await response.text();
                     showErrorBanner('something went wrong', errorText);
+                    loaderContainer.classList.add("hidden");
                     return;
                 }
 
                 return response.json();
             })
             .then(user => {
+                loaderContainer.classList.add("hidden");
                 sessionStorage.setItem('username', user.username);
                 sessionStorage.setItem('email', user.email);
                 sessionStorage.setItem('salt', user.salt);
@@ -104,12 +109,14 @@ async function login(event) {
 
     const formData = new FormData(event.target);
     const formObject = Object.fromEntries(formData.entries());
+    
 
     if (formObject.password.length < 8) {
         showErrorBanner('Incorrect Password Length', 'insufficient password length');
         return;
     }
 
+    loaderContainer.classList.remove("hidden");
     const masterPassword = formObject.password;
 
     fetch('/users/salt?email=' + formObject.email, {
@@ -118,6 +125,7 @@ async function login(event) {
     .then(async response => {
         if (!response.ok) {
             const errorText = await response.text();
+            loaderContainer.classList.add("hidden");
             showErrorBanner('something went wrong', errorText);
             return;
         }
@@ -140,6 +148,7 @@ async function login(event) {
         .then(async response => {
             if (!response.ok) {
                 const errorText = await response.text();
+                loaderContainer.classList.add("hidden");
                 showErrorBanner('something went wrong', errorText);
                 return;
             }
@@ -148,8 +157,11 @@ async function login(event) {
         })
         .then(user => {
             if (!user) {
+                loaderContainer.classList.add("hidden");
+                showErrorBanner('something went wrong', errorText);
                 return;
             }
+            loaderContainer.classList.add("hidden");
             sessionStorage.setItem('username', user.username);
             sessionStorage.setItem('email', user.email);
             sessionStorage.setItem('salt', user.salt);
@@ -160,6 +172,7 @@ async function login(event) {
         })
     })
 }
+  
 
 if (window.location.href === local_url + 'register') {
     document.getElementById('register_form').addEventListener('submit', register_user);

@@ -34,6 +34,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   async function updateLoginInfo(event) {
     event.preventDefault();
+    loaderContainer.classList.remove("hidden");
 
     const formData = new FormData(event.target);
     const formObject = Object.fromEntries(formData.entries());
@@ -59,6 +60,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (!response.ok) {
           const errorText = await response.text();
           alert('Something went wrong');
+          loaderContainer.classList.add("hidden");
           return;
       }
       
@@ -67,12 +69,14 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   window.deleteLogin = function(index) {
+    loaderContainer.classList.remove("hidden");
     fetch(`/vaults/delete/${index}`, {
       method: "DELETE"
     })
     .then(async response => {
       if (!response.ok) {
           const errorText = await response.text();
+          loaderContainer.classList.add("hidden");
           alert('Something went wrong');
           return;
       }
@@ -85,6 +89,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const modal = document.getElementById('info_modal');
     const titleText = card.querySelector('.vault-title').textContent;
     const domainText = card.querySelector('.vault-meta').textContent;
+    loaderContainer.classList.remove("hidden");
 
     fetch(`/vaults/getvault/${card.id}`, {
         method: "GET"
@@ -92,6 +97,7 @@ document.addEventListener('DOMContentLoaded', () => {
     .then(async response => {
         if (!response.ok) {
             const errorText = await response.text();
+            loaderContainer.classList.add("hidden");
             alert('Something went wrong');
             return;
         }
@@ -176,6 +182,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
           modal.style.display = 'none';
         };password_edition
+
+        loaderContainer.classList.add("hidden");
     });
   }
   
@@ -185,6 +193,7 @@ document.addEventListener('DOMContentLoaded', () => {
   
     const res = await fetch('/vaults/getvault/all');
     if (!res.ok) {
+      loaderContainer.classList.add("hidden");
       alert('Something went wrong');
       return;
     }
@@ -218,15 +227,19 @@ document.addEventListener('DOMContentLoaded', () => {
       `;
       vaultContainer.appendChild(card);
     }
+
+    loaderContainer.classList.add("hidden");
   }
 
 window.cloneLogin = function(index) {
+  loaderContainer.classList.remove("hidden");
     fetch(`/vaults/clone/${index}`, {
         method: "POST"
     })
     .then(async response => {
         if (!response.ok) {
             const errorText = await response.text();
+            loaderContainer.classList.add("hidden");
             alert('Something went wrong');
             return;
         }
@@ -241,6 +254,7 @@ async function populate_user_info() {
     let reused_passwords = document.getElementById('reused_passwords');
     let insecure_sites = document.getElementById('insecure_sites');
     let account_health = document.getElementById('account_health');
+    loaderContainer.classList.remove("hidden");
 
     username.innerText = sessionStorage.username;
     user_email.innerText = sessionStorage.email;
@@ -251,6 +265,7 @@ async function populate_user_info() {
     .then(async response => {
         if (!response.ok) {
             const errorText = await response.text();
+            loaderContainer.classList.add("hidden");
             alert('Something went wrong');
             return;
         }
@@ -267,6 +282,7 @@ async function populate_user_info() {
             reused_passwords.innerHTML = `<strong>Logins reusing passwords:</strong> 0`;
             insecure_sites.innerHTML = `<strong>Logins in insecure sites:</strong> 0`;
             account_health.innerHTML = `You do not have any passwords yet`;
+            loaderContainer.classList.add("hidden");
             return;
         }
 
@@ -300,6 +316,7 @@ async function populate_user_info() {
         let totalAtRisk = new Set([...reusedIndices, ...insecureIndices]);
         let atRiskPercentage = ((totalAtRisk.size / passwords.length) * 100).toFixed(2);
 
+        loaderContainer.classList.add("hidden");
         reused_passwords.innerHTML = `<strong>Logins reusing passwords:</strong> ${reused}`;
         insecure_sites.innerHTML = `<strong>Logins in insecure sites:</strong> ${insecure}`;
         account_health.innerHTML = `<strong>${atRiskPercentage}%</strong> of your passwords are at risk`;
@@ -313,8 +330,10 @@ async function addNewEntry(event) {
 
     const formData = new FormData(event.target);
     const formObject = Object.fromEntries(formData.entries());
+    loaderContainer.classList.remove("hidden");
     
     if (!formObject.name.length) {
+        loaderContainer.classList.add("hidden");
         alert('your item must at least have a name');
         return;
     }
@@ -339,7 +358,9 @@ async function addNewEntry(event) {
     .then(async response => {
         if (!response.ok) {
             const errorText = await response.text();
-            alert('something went wrong')
+            loaderContainer.classList.add("hidden");
+            alert('something went wrong');
+            return;
         } 
 
         populate_user_info();
