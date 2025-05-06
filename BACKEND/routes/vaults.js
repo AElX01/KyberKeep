@@ -29,4 +29,8 @@ routerVaults.post('/clone/:entry', authenticateRequest, VaultsController.cloneEn
 
 routerVaults.get('/getvault/:toGet', authenticateRequest, VaultsController.getLoginInfo);
 
+routerVaults.patch('/update/:entry', authenticateRequest, VaultsController.updateLoginInfo);
+
+routerVaults.delete('/delete/:entry', authenticateRequest, VaultsController.deleteLoginInfo);
+
 module.exports = routerVaults;

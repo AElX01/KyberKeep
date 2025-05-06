@@ -13,9 +13,8 @@ function isValidURL(str) {
     }
 }
 
-// 1. One-time setup: modal creation and global click handler
+
 document.addEventListener('DOMContentLoaded', () => {
-    // Create and hide the modal overlay
     const modalContainer = document.createElement('div');
     modalContainer.id = 'info_modal';
     modalContainer.className = 'modal-overlay';
@@ -32,8 +31,56 @@ document.addEventListener('DOMContentLoaded', () => {
       showInfoModal(card);
     });
   });
-  
-  // 2. Function to build/show the modal
+
+  async function updateLoginInfo(event) {
+    event.preventDefault();
+
+    const formData = new FormData(event.target);
+    const formObject = Object.fromEntries(formData.entries());
+    const entry = JSON.stringify({
+      "username": formObject.username,
+      "password": formObject.password
+    });
+    
+    await init();
+    const encryped = chacha20poly1305_encrypt(sessionStorage.vault_key, entry);
+    formObject.website = 'https://' + formObject.website;
+
+    fetch(`/vaults/update/${event.target.className}`, {
+      method: "PATCH",
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        "item_name": formObject.item_name,
+        "encrypted_data": encryped,
+        "url": formObject.website
+      })
+    })
+    .then(async response => {
+      if (!response.ok) {
+          const errorText = await response.text();
+          alert('Something went wrong');
+          return;
+      }
+      
+      populate_vaults_container();
+    })
+  }
+
+  window.deleteLogin = function(index) {
+    fetch(`/vaults/delete/${index}`, {
+      method: "DELETE"
+    })
+    .then(async response => {
+      if (!response.ok) {
+          const errorText = await response.text();
+          alert('Something went wrong');
+          return;
+      }
+      
+      populate_vaults_container();
+    })
+  }
+
   function showInfoModal(card) {
     const modal = document.getElementById('info_modal');
     const titleText = card.querySelector('.vault-title').textContent;
@@ -54,7 +101,8 @@ document.addEventListener('DOMContentLoaded', () => {
     .then(async entry => {
         await init();
         const decrypted = JSON.parse(chacha20poly1305_decrypt(sessionStorage.vault_key, entry.encrypted_data));
-  
+
+        let index = card.id;
         modal.innerHTML = `
           <div class="modal-content">
             <button class="modal-close">&times;</button>
@@ -64,24 +112,24 @@ document.addEventListener('DOMContentLoaded', () => {
                    alt="${titleText}" />
               <h2 class="modal-title">${titleText}</h2>
             </div>
-            <form id="password_edition">
+            <form id=password_edition class=${card.id}>
               <h3 class="modal-section-title">Item details</h3>
               <div class="modal-field">
                 <label>Item name</label>
-                <input class="modal-data" value="${titleText}">
+                <input name="item_name" class="modal-data" value="${titleText}">
               </div>
               <h3 class="modal-section-title">Login information</h3>
               <div class="modal-field-group">
                 <div class="modal-field">
                   <label>Username</label>
-                  <input class="modal-data" value="${decrypted.username}">
+                  <input name="username" class="modal-data" value="${decrypted.username}">
                 </div>
                 <button type="button" class="modal_cpy_btn"><i class="fas fa-clone"></i></button>
               </div>
               <div class="modal-field-group">
                 <div class="modal-field">
                   <label>Password</label>
-                  <input class="modal-data" type="password" value="${decrypted.password}">
+                  <input name="password" class="modal-data" type="password" value="${decrypted.password}">
                 </div>
                 <button type="button" class="modal_cpy_btn"><i class="fas fa-eye-slash"></i></button>
                 <button type="button" class="modal_cpy_btn"><i class="fas fa-clone"></i></button>
@@ -90,37 +138,44 @@ document.addEventListener('DOMContentLoaded', () => {
               <div class="modal-field-group">
                 <div class="modal-field">
                   <label>Website</label>
-                  <input class="modal-data" value="${domainText}">
+                  <input name="website" class="modal-data" value="${domainText}">
                 </div>
                 <button type="button" class="modal_cpy_btn"><i class="fas fa-up-right-from-square"></i></button>
                 <button type="button" class="modal_cpy_btn"><i class="fas fa-clone"></i></button>
               </div>
               <div class="modal-actions">
                 <button type="submit" class="edit_btn"><i class="fas fa-pen"></i></button>
-                <button type="button" class="delete_btn"><i class="fas fa-trash"></i></button>
+                <button onclick="deleteLogin(${index})" type="button" class="delete_btn remove"><i class="fas fa-trash"></i></button>
               </div>
             </form>
           </div>
         `;
+
+        modal.querySelector('.remove').addEventListener('click', () => {
+          window.deleteLogin(card.id);
+          modal.style.display = 'none';
+        });
         
-        // Show it
+
+        const form = modal.querySelector(`#password_edition`);
+        form.addEventListener('submit', updateLoginInfo);
+
+        
         modal.style.display = 'flex';
         
-        // Close handlers
         modal.querySelector('.modal-close').onclick = () => modal.style.display = 'none';
         modal.onclick = e => {
           if (e.target === modal) modal.style.display = 'none';
         };
-    
-        // Edit/Delete stubs
+
         modal.querySelector('.edit_btn').onclick = () => {
-          /* your edit logic */
+
           modal.style.display = 'none';
         };
         modal.querySelector('.delete_btn').onclick = () => {
-          /* your delete logic */
+
           modal.style.display = 'none';
-        };
+        };password_edition
     });
   }
   
@@ -288,6 +343,7 @@ async function addNewEntry(event) {
         } 
 
         populate_user_info();
+        populate_vaults_container();
     })
 }
 

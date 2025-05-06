@@ -9,8 +9,8 @@ use hex::{decode, encode};
 
 #[wasm_bindgen]
 pub fn chacha20poly1305_encrypt(master_key_hex: &str, data: &str) -> Result<String, JsValue> {
-    let key_bytes = decode(master_key_hex).map_err(|_| JsValue::from_str("E1"))?;
-    let key = Key::from_slice(&key_bytes);
+    let key_bytes = decode(master_key_hex).map_err(|_| JsValue::from_str("E1"))?; 
+    let key = Key::from_slice(&key_bytes); 
     let cipher = ChaCha20Poly1305::new(key);
 
     let mut nonce_bytes = [0u8; 12];

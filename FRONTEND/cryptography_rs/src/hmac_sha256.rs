@@ -6,9 +6,10 @@ use hex::{decode, encode};
 type HmacSha256 = Hmac<Sha256>;
 
 
+// function to generate the authentication hash
 #[wasm_bindgen]
 pub fn generate_auth_hmac(master_key_hex: &str, message: &str) -> Result<String, JsValue> {
-    let master_key = decode(master_key_hex).map_err(|_| JsValue::from_str("E"))?;
+    let master_key = decode(master_key_hex).map_err(|_| JsValue::from_str("E"))?; // decodes the hex key returning it to its binary original format
 
     let mut mac = HmacSha256::new_from_slice(&master_key).map_err(|_| JsValue::from_str("E"))?;
 
