@@ -153,6 +153,12 @@ async function update_password(event) {
 }
 
 async function update_user_info(event) {
+    event.preventDefault();
+
+    const formData = new FormData(event.target);
+    const formObject = Object.fromEntries(formData.entries());
+    console.log(formObject);
+
     if (!(formObject.username.length || formObject.email.length)) {
         alert('no changes');
         return;
@@ -189,10 +195,32 @@ async function update_user_info(event) {
                 sessionStorage.setItem('username', user.username);
                 sessionStorage.setItem('email', user.email);
                 sessionStorage.setItem('salt', user.salt);
+                populate_user_info();
             })
         }
     } else if (formObject.username.length) {
-
+            fetch('/users/update', {
+                method: 'PATCH',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    "username": formObject.username
+                }) 
+            })
+            .then(async response => {
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    alert('something went wrong')
+                    return;
+                }
+    
+                return response.json();
+            })
+            .then(user => {
+                sessionStorage.setItem('username', user.username);
+                sessionStorage.setItem('email', user.email);
+                sessionStorage.setItem('salt', user.salt);
+                populate_user_info();
+            })
     } else if (formObject.email.length) {
         if (!formObject.password.length) {
             alert('no master password provided');
@@ -226,6 +254,7 @@ async function update_user_info(event) {
                 sessionStorage.setItem('username', user.username);
                 sessionStorage.setItem('email', user.email);
                 sessionStorage.setItem('salt', user.salt);
+                populate_user_info();
             })
         }
     }

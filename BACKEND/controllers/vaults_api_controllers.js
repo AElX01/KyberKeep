@@ -42,6 +42,7 @@ exports.createVault = async (req, res) => {
         const saved = await vault.save();
         res.sendStatus(201);
     } catch (err) {
+        console.log(err);
         res.sendStatus(500);
     }
 }
@@ -52,7 +53,6 @@ exports.cloneEntry = async (req, res) => {
     try {
         let vault = await Vault.findOne({ email });
         let entryToClone = vault.encrypted_vault[req.params.entry];
-        entryToClone.entry_id = uuid();
 
         const updatedVault = await Vault.findOneAndUpdate(
             { email },
@@ -71,7 +71,6 @@ exports.addEntry = async (req, res) => {
     const { sub: email } = req.user;
     const { encrypted_data, item_name, url } = req.body;
     const newEntry = {
-        entry_id: uuid(),
         item_name,
         url,
         encrypted_data
@@ -125,7 +124,6 @@ exports.deleteLoginInfo = async (req, res) => {
         { $unset: { [`encrypted_vault.${entryIndex}`]: 1 } }
       );
   
-
       await Vault.updateOne(
         { email },
         { $pull: { encrypted_vault: null } }

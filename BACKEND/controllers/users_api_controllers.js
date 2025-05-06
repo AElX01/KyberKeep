@@ -8,6 +8,7 @@ const Vault = require('../models/vaults');
 function generateJWT(user) {
     const payload = {
         sub: user.email,
+        id: user._id,
         iat: Math.floor(Date.now() / 1000),
         exp: Math.floor(Date.now() / 1000) + 15 * 60
     };
@@ -88,14 +89,19 @@ exports.login = async (req, res) => {
 }
 
 exports.updateUser = async (req, res) => {
-    const { sub: email } = req.user;
+    const { id: id, sub: email } = req.user;
 
 
     if (req.headers['auth_hash']) {
         const authHashHex = req.headers['auth_hash'];
 
         try {
-            let user = await User.findOne({ email });
+            const newEmail = req.body.email;
+            let user = await User.findById(id);
+            let repeated = await User.findOne({ newEmail });
+            if (repeated) {
+                return res.status(400).send('cannot update with this email');
+            }
     
             if (!user) {
                 return res.status(400).send('Username or password is incorrect');
@@ -110,7 +116,7 @@ exports.updateUser = async (req, res) => {
                 if (crypto.timingSafeEqual(recvHash, storedHash)) {
                     if (req.body.username === undefined && req.body.email === undefined) {
                         user = await User.findOneAndUpdate(
-                            { email },
+                            { _id: id },
                             { 
                                 auth_hash: req.body.auth_hash,
                                 salt: req.body.salt
@@ -139,7 +145,7 @@ exports.updateUser = async (req, res) => {
                     if (req.body.username.length && req.body.email.length) {
 
                         user = await User.findOneAndUpdate(
-                            { email },
+                            { _id: id },
                             { 
                                 email: req.body.email,
                                 username: req.body.username
@@ -147,6 +153,14 @@ exports.updateUser = async (req, res) => {
                             },
                             { new: true }
                         )
+
+                        let vault = await Vault.findOneAndUpdate(
+                            { email },
+                            {
+                                email: req.body.email,
+                            },
+                            { new: true }
+                        );
 
                         const token = generateJWT(user);
 
@@ -165,13 +179,21 @@ exports.updateUser = async (req, res) => {
                         return;
                     } else if (req.body.email.length) {
                         user = await User.findOneAndUpdate(
-                            { email },
+                            { _id: id },
                             { 
                                 email: req.body.email,
 
                             },
                             { new: true }
-                        )
+                        );
+
+                        let vault = await Vault.findOneAndUpdate(
+                            { email },
+                            {
+                                email: req.body.email,
+                            },
+                            { new: true }
+                        );
 
                         const token = generateJWT(user);
 
@@ -181,26 +203,33 @@ exports.updateUser = async (req, res) => {
                             sameSite: 'Strict',
                             maxAge: 15 * 60 * 1000
                         });
-                        res.status(200).json({
+                        return res.status(200).json({
                             email: user.email,
                             username: user.username,
                             salt: user.salt
                         });
-
-                        return;
-                    } else {
-                        console.log(req.body.auth_hash, req.body.salt);
-                    }
+                    } 
                 } else {
                     return res.status(401).send('master password is not correct');
                 }
             }
         } catch (err) {
-            console.log(err);
             return res.sendStatus(500);
         }
     } else {
+        user = await User.findOneAndUpdate(
+            { _id: id },
+            { 
+                username: req.body.username
 
+            },
+            { new: true }
+        )
+        return res.status(200).json({
+            email: user.email,
+            username: user.username,
+            salt: user.salt
+        });
     }
 }
 
