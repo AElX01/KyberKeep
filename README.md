@@ -10,7 +10,7 @@ A simple and secure application to store and manage your passwords.
 
 ## Cloning the repository:
     ```bash
-    git clone 
+    git clone git@github.com:AElX01/KyberKeep.git
     ```
 
 ## Security
