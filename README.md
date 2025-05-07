@@ -2,6 +2,9 @@
 
 An experimental web-based and quantum-safe cryptography password manager with a zero-knowledge architecture.
 
+> [!TIP]
+> **We recommend deploying KyberKeep in a secure remote server using a VPN. An HTTPS connection will not guarantee security.**
+
 ## features
 
 - Website icons
@@ -20,6 +23,3 @@ An experimental web-based and quantum-safe cryptography password manager with a 
 
 > [!IMPORTANT]
 > **This is still an experimental project and we DO NOT recommend to use it as your daily password manager. hmac challenges are static, so far, the authenticity of users is checked by signing the authentication hash with Dilithium. The session storage will contain the vault's encryption key in raw plaintext, which is an important KyberKeep's security flaw.**
-
-> [!TIP]
-> **We recommend deploying KyberKeep in a secure remote server using a VPN. An HTTPS connection will not guarantee security.**
