@@ -1,6 +1,4 @@
-<div align="center">
-  <img src="FRONTEND/assets/icon/Logo.svg" alt="Logo" width="200px" height="200px">
-</div>
+
 
 An experimental web-based and quantum-safe cryptography password manager with a zero-knowledge architecture.
 
