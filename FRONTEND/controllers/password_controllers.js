@@ -108,7 +108,7 @@ document.addEventListener('DOMContentLoaded', () => {
         await init();
         const decrypted = JSON.parse(chacha20poly1305_decrypt(sessionStorage.vault_key, entry.encrypted_data));
 
-        let index = card.id;
+        let index = entry._id;
         modal.innerHTML = `
           <div class="modal-content">
             <button class="modal-close">&times;</button>
@@ -118,7 +118,7 @@ document.addEventListener('DOMContentLoaded', () => {
                    alt="${titleText}" />
               <h2 class="modal-title">${titleText}</h2>
             </div>
-            <form id=password_edition class=${card.id}>
+            <form id=password_edition class=${index}>
               <h3 class="modal-section-title">Item details</h3>
               <div class="modal-field">
                 <label>Item name</label>
@@ -151,7 +151,7 @@ document.addEventListener('DOMContentLoaded', () => {
               </div>
               <div class="modal-actions">
                 <button type="submit" class="edit_btn"><i class="fas fa-pen"></i></button>
-                <button onclick="deleteLogin(${index})" type="button" class="delete_btn remove"><i class="fas fa-trash"></i></button>
+                <button onclick="deleteLogin('${index}')" type="button" class="delete_btn remove"><i class="fas fa-trash"></i></button>
               </div>
             </form>
           </div>
@@ -187,27 +187,30 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
   
-  async function populate_vaults_container() {
+  async function populate_vaults_container(route='all') {
     const vaultContainer = document.getElementById('vault-container');
     vaultContainer.innerHTML = '';
+    route = route || 'all';
   
-    const res = await fetch('/vaults/getvault/all');
+    const res = await fetch(`/vaults/getvault/${route}`);
     if (!res.ok) {
       loaderContainer.classList.add("hidden");
       alert('Something went wrong');
       return;
     }
-    const { entries } = await res.json();
+
+    let { entries } = await res.json();
   
     for (let [index, info] of entries.entries()) {
       let domain = isValidURL(info.url)
         ? new URL(info.url).hostname
         : '';
       let url = isValidURL(info.url) ? info.url : '#';
-  
+
       const card = document.createElement('div');
       card.className = 'vault-card';
-      card.id = index;
+      card.id = info._id;
+      index = info._id;
       card.innerHTML = `
         <img class="vault-icon"
              src="https://www.google.com/s2/favicons?domain=${domain}"
@@ -220,7 +223,7 @@ document.addEventListener('DOMContentLoaded', () => {
           <button onclick="window.open('${url}', '_blank')">
             <i class="fas fa-up-right-from-square"></i>
           </button>
-          <button onclick="cloneLogin(${index})">
+          <button onclick="cloneLogin('${index}')">
             <i class="fas fa-clone"></i>
           </button>
         </div>
@@ -373,8 +376,18 @@ if (window.location.href === local_url) {
     if (sessionStorage.getItem('email') == null) {
         window.location.href = local_url + 'users/logout';
     }
+
+    const search_field = document.getElementById('query');
       
     document.getElementById('create_password_form').addEventListener('submit', addNewEntry);
+    let debounceTimeout;
+
+    search_field.addEventListener('input', () => {
+      clearTimeout(debounceTimeout); // Clear the previous timeout
+      debounceTimeout = setTimeout(() => {
+        populate_vaults_container(search_field.value); // Call the function after the delay
+      }, 200); // 300 ms delay, adjust to your preference
+    });
 
     populate_vaults_container();
     populate_user_info();

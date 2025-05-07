@@ -3,27 +3,26 @@ const Vault = require('../models/vaults');
 
 exports.updateLoginInfo = async (req, res) => {
     const { sub: email } = req.user;
-    const entryIndex = req.params.entry;
+    const entryId = req.params.entry;
   
     try {
-      const update = {
-        [`encrypted_vault.${entryIndex}.item_name`]: req.body.item_name,
-        [`encrypted_vault.${entryIndex}.url`]: req.body.url,
-        [`encrypted_vault.${entryIndex}.encrypted_data`]: req.body.encrypted_data
-      };
+      const vault = await Vault.findOne({ email });
+      if (!vault) return res.status(404).send("Vault not found");
   
-      const result = await Vault.updateOne({ email }, { $set: update });
+      const entry = vault.encrypted_vault.id(entryId);
+      if (!entry) return res.status(404).send("Entry not found");
   
-      if (result.modifiedCount === 0) {
-        return res.status(404).send("No changes made or entry not found.");
-      }
+      entry.item_name = req.body.item_name;
+      entry.url = req.body.url;
+      entry.encrypted_data = req.body.encrypted_data;
   
+      await vault.save();
       res.sendStatus(200);
     } catch (err) {
       console.error(err);
       res.status(500).send("Could not update login information");
     }
-};
+  };  
   
 
 exports.createVault = async (req, res) => {
@@ -52,7 +51,8 @@ exports.cloneEntry = async (req, res) => {
 
     try {
         let vault = await Vault.findOne({ email });
-        let entryToClone = vault.encrypted_vault[req.params.entry];
+        let entryToClone = await vault.encrypted_vault.id(req.params.entry);
+          
 
         const updatedVault = await Vault.findOneAndUpdate(
             { email },
@@ -63,7 +63,7 @@ exports.cloneEntry = async (req, res) => {
         res.sendStatus(200);
 
     } catch (err) {
-        console.log(err);
+        res.status(400).send('an error ocurred');
     }
 }
 
@@ -105,8 +105,14 @@ exports.getLoginInfo = async (req, res) => {
             }
 
             res.status(200).json({ entries: vault.encrypted_vault });
+        } else if (/^[a-zA-Z]+$/.test(req.params.toGet)) {
+            const searchTerm = req.params.toGet.toLowerCase();
+            const match = vault.encrypted_vault.filter(obj => obj.item_name.toLocaleLowerCase().includes(searchTerm));
+
+            res.status(200).json({ entries: match});
         } else {
-            res.status(200).send(vault.encrypted_vault[req.params.toGet]);
+            const element = await vault.encrypted_vault.id(req.params.toGet);
+            res.status(200).send(element);
         }
     } catch(err) {
         res.sendStatus(500);
@@ -115,19 +121,12 @@ exports.getLoginInfo = async (req, res) => {
 
 exports.deleteLoginInfo = async (req, res) => {
     const { sub: email } = req.user;
-    const entryIndex = parseInt(req.params.entry, 10);
   
     try {
-
-      await Vault.updateOne(
-        { email },
-        { $unset: { [`encrypted_vault.${entryIndex}`]: 1 } }
-      );
-  
-      await Vault.updateOne(
-        { email },
-        { $pull: { encrypted_vault: null } }
-      );
+        await Vault.updateOne(
+            { email },
+            { $pull: { encrypted_vault: { _id: req.params.entry } } }
+        );
   
       res.sendStatus(200);
     } catch (err) {
