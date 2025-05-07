@@ -52,11 +52,20 @@ exports.cloneEntry = async (req, res) => {
     try {
         let vault = await Vault.findOne({ email });
         let entryToClone = await vault.encrypted_vault.id(req.params.entry);
-          
+
+        let item_name = entryToClone.item_name;
+        let url = entryToClone.url;
+        let encrypted_data = entryToClone.encrypted_data;
+
+        const newEntry = {
+            item_name,
+            url,
+            encrypted_data
+        };
 
         const updatedVault = await Vault.findOneAndUpdate(
             { email },
-            { $push: { encrypted_vault: entryToClone } },
+            { $push: { encrypted_vault: newEntry } },
             { new: true }
         );
 
