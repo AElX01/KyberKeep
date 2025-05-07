@@ -1,4 +1,4 @@
-![]('./assets/icon/Logo.svg)
+![]('./FRONTEND/assets/icon/Logo.svg)
 
 An experimental web-based and quantum-safe cryptography password manager with a zero-knowledge architecture.
 
