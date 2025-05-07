@@ -13,25 +13,6 @@ function isValidURL(str) {
     }
 }
 
-
-document.addEventListener('DOMContentLoaded', () => {
-    const modalContainer = document.createElement('div');
-    modalContainer.id = 'info_modal';
-    modalContainer.className = 'modal-overlay';
-    modalContainer.style.display = 'none';
-    document.body.appendChild(modalContainer);
-  
-    const vaultContainer = document.getElementById('vault-container');
-    vaultContainer.addEventListener('click', (e) => {
-      const card = e.target.closest('.vault-card');
-      if (!card) return;
-  
-      if (e.target.closest('.vault-actions')) return;
-  
-      showInfoModal(card);
-    });
-  });
-
   async function updateLoginInfo(event) {
     event.preventDefault();
     loaderContainer.classList.remove("hidden");
@@ -42,10 +23,11 @@ document.addEventListener('DOMContentLoaded', () => {
       "username": formObject.username,
       "password": formObject.password
     });
+    console.log(formObject.website);
     
     await init();
     const encryped = chacha20poly1305_encrypt(sessionStorage.vault_key, entry);
-    formObject.website = 'https://' + formObject.website;
+    formObject.website = 'https://' + formObject.website; // take care of this
 
     fetch(`/vaults/update/${event.target.className}`, {
       method: "PATCH",
@@ -156,6 +138,36 @@ document.addEventListener('DOMContentLoaded', () => {
             </form>
           </div>
         `;
+
+       
+        modal.querySelectorAll('.modal_cpy_btn').forEach(btn => {
+          btn.addEventListener('click', () => {
+           
+            const container = btn.closest('.modal-field-group') || btn.closest('.modal-field');
+            const input = container.querySelector('.modal-data');
+            if (!input) return;
+          
+           
+            if (btn.querySelector('.fa-clone')) {
+              navigator.clipboard.writeText(input.value)
+                .then(() => {
+                 
+                  btn.innerHTML = '<i class="fas fa-check"></i>';
+                  setTimeout(() => btn.innerHTML = '<i class="fas fa-clone"></i>', 1000);
+                })
+                .catch(err => console.error('Clipboard write failed', err));
+            }
+            
+            else if (btn.querySelector('.fa-eye-slash') || btn.querySelector('.fa-eye')) {
+              
+              const isHidden = input.type === 'password';
+              input.type = isHidden ? 'text' : 'password';
+              
+              btn.innerHTML = `<i class="fas ${isHidden ? 'fa-eye' : 'fa-eye-slash'}"></i>`;
+            }
+          });
+        });
+
 
         modal.querySelector('.remove').addEventListener('click', () => {
           window.deleteLogin(card.id);
@@ -377,16 +389,64 @@ if (window.location.href === local_url) {
         window.location.href = local_url + 'users/logout';
     }
 
+    document.addEventListener('DOMContentLoaded', () => {
+      const modalContainer = document.createElement('div');
+      modalContainer.id = 'info_modal';
+      modalContainer.className = 'modal-overlay';
+      modalContainer.style.display = 'none';
+      document.body.appendChild(modalContainer);
+    
+      const vaultContainer = document.getElementById('vault-container');
+      vaultContainer.addEventListener('click', (e) => {
+        const card = e.target.closest('.vault-card');
+        if (!card) return;
+    
+        if (e.target.closest('.vault-actions')) return;
+    
+        showInfoModal(card);
+      });
+    });
+
     const search_field = document.getElementById('query');
       
     document.getElementById('create_password_form').addEventListener('submit', addNewEntry);
     let debounceTimeout;
 
     search_field.addEventListener('input', () => {
-      clearTimeout(debounceTimeout); // Clear the previous timeout
+      clearTimeout(debounceTimeout);
       debounceTimeout = setTimeout(() => {
-        populate_vaults_container(search_field.value); // Call the function after the delay
-      }, 200); // 300 ms delay, adjust to your preference
+        populate_vaults_container(search_field.value); 
+      }, 200); 
+    });
+
+    const modal = document.getElementById('create_password_modal');
+
+    modal.querySelectorAll('.modal_cpy_btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+  
+        const container = btn.closest('.modal-field-group') || btn.closest('.modal-field');
+        const input = container.querySelector('.modal-data');
+        if (!input) return;
+      
+
+        if (btn.querySelector('.fa-clone')) {
+          navigator.clipboard.writeText(input.value)
+            .then(() => {
+      
+              btn.innerHTML = '<i class="fas fa-check"></i>';
+              setTimeout(() => btn.innerHTML = '<i class="fas fa-clone"></i>', 1000);
+            })
+            .catch(err => console.error('Clipboard write failed', err));
+        }
+     
+        else if (btn.querySelector('.fa-eye-slash') || btn.querySelector('.fa-eye')) {
+ 
+          const isHidden = input.type === 'password';
+          input.type = isHidden ? 'text' : 'password';
+    
+          btn.innerHTML = `<i class="fas ${isHidden ? 'fa-eye' : 'fa-eye-slash'}"></i>`;
+        }
+      });
     });
 
     populate_vaults_container();

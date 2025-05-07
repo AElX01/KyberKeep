@@ -16,7 +16,7 @@ function generateJWT(user) {
     const token = jwt.sign(payload, privateKey);
     return token;
 }
-//This is for email access
+
 exports.getSalt = async (req, res) => {
     const { email } = req.query;
 
@@ -31,7 +31,7 @@ exports.getSalt = async (req, res) => {
         return res.status(401).send('Email or password wrong');
     }
 }
-//This is for register account
+
 exports.registerAccount = async (req, res, next) => {
     const { username, email, auth_hash, salt, iterations } = req.body;
 
@@ -48,7 +48,7 @@ exports.registerAccount = async (req, res, next) => {
         return res.status(400).send('could not create user account');
     }
 }
-//This is for login
+
 exports.login = async (req, res) => {
     const { email, auth_hash: authHashHex } = req.body;
 
@@ -87,7 +87,7 @@ exports.login = async (req, res) => {
         return res.sendStatus(500);
     }
 }
-//This is for update
+
 exports.updateUser = async (req, res) => {
     const { id: id, sub: email } = req.user;
 
@@ -238,7 +238,7 @@ exports.updateUser = async (req, res) => {
         res.sendStatus(500);
     }
 }
-//This is for delete
+
 exports.deleteUser = async (req, res) => {
     const { sub: email } = req.user;
 

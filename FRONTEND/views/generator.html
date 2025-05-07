@@ -46,91 +46,108 @@
 
         <div id="main-generate-password" style="margin-top: 5rem;">
             <h3 class="modal-section-title">Password</h3>
-            <div class="modal-field-group">
-              <div class="modal-field">
-                <div class="modal-data-create">g3n3r4t3d_s4mpl3</div>
-              </div>
-              <button class="modal_cpy_btn"><i class="fas fa-arrows-rotate"></i></button>
-              <button class="modal_cpy_btn"><i class="fas fa-clone"></i></button>
-            </div>
-
-            <h3 class="modal-section-title">Options</h3>
-            <div class="modal-field-group">
-              <div class="modal-field">
-                <label>Length</label>
-                <div class="modal-data-create" contenteditable="true" data-editable="true">16</div>
-              </div>
-            </div>
-
-            <h3 class="modal-section-title">Include</h3>
-            <div class="modal-field-group">
+            <form id="generate_password_form">
+              <div class="modal-field-group">
                 <div class="modal-field">
-                  <label>Minimum numbers</label>
-                  <div class="modal-data-create" contenteditable="true" data-editable="true">25</div>
+                  <input id="generated_password" class="modal-data" disabled>
                 </div>
-            </div>
-            <div class="modal-field-group">
-                <div class="modal-field">
-                    <label>Minimum special</label>
-                    <div class="modal-data-create" contenteditable="true" data-editable="true">0</div>
-                </div>
-            </div>
+                <button type="submit" class="modal_cpy_btn"><i class="fas fa-arrows-rotate"></i></button>
+                <button type="button" class="modal_cpy_btn"><i class="fas fa-clone"></i></button>
+              </div>
 
-            <div class="modal-field-group" style="margin-top: 2rem;">
-                <label>
-                    <input type="checkbox" class="input">
-                    <span class="custom-checkbox"></span>
-                    <span class="checkbox-text">A-Z</span>
-                </label>
-            </div>
-            <div class="modal-field-group" style="margin-top: 1rem;">
-                <label>
-                    <input type="checkbox" class="input">
-                    <span class="custom-checkbox"></span>
-                    <span class="checkbox-text">a-z</span>
-                </label>
-            </div>
-            <div class="modal-field-group" style="margin-top: 1rem;">
-                <label>
-                    <input type="checkbox" class="input">
-                    <span class="custom-checkbox"></span>
-                    <span class="checkbox-text">0-9</span>
-                </label>
-            </div>
+                <h3 class="modal-section-title">Options</h3>
+                <div class="modal-field-group">
+                  <div class="modal-field">
+                    <label>Length</label>
+                    <input name="length" class="modal-data">
+                  </div>
+                </div>
+
+                <h3 class="modal-section-title">Include</h3>
+                <div class="modal-field-group">
+                    <div class="modal-field">
+                      <label>Minimum numbers</label>
+                      <input name="min" class="modal-data">
+                    </div>
+                </div>
+                <div class="modal-field-group">
+                  <div class="modal-field">
+                      <label>Minimum special</label>
+                      <input name="max" class="modal-data">
+                  </div>
+              </div>
+
+                <div class="modal-field-group" style="margin-top: 2rem;">
+                    <label>
+                        <input name="uppercase" type="checkbox" class="input">
+                        <span class="custom-checkbox"></span>
+                        <span class="checkbox-text">A-Z</span>
+                    </label>
+                </div>
+                <div class="modal-field-group" style="margin-top: 1rem;">
+                  <label>
+                      <input name="lowercase" type="checkbox" class="input">
+                      <span class="custom-checkbox"></span>
+                      <span class="checkbox-text">a-z</span>
+                  </label>
+              </div>
+              <div class="modal-field-group" style="margin-top: 1rem;">
+                  <label>
+                      <input name="numbers" type="checkbox" class="input">
+                      <span class="custom-checkbox"></span>
+                      <span class="checkbox-text">0-9</span>
+                  </label>
+              </div>
+            </form>
         </div>
 
         
         <div id="main-generate-username" style="margin-top: 5rem; display: none;">
           <h3 class="modal-section-title">Username</h3>
-          <div class="modal-field-group">
-            <div class="modal-field">
-              <div class="modal-data-create">Anahi</div>
+          <form id="generated_username_form">
+            <div class="modal-field-group">
+              <div class="modal-field">
+                <input id="generated_username" class="modal-data" disabled>
+              </div>
+              <button type="submit" class="modal_cpy_btn"><i class="fas fa-arrows-rotate"></i></button>
+              <button type="button" class="modal_cpy_btn"><i class="fas fa-clone"></i></button>
             </div>
-            <button class="modal_cpy_btn"><i class="fas fa-arrows-rotate"></i></button>
-            <button class="modal_cpy_btn"><i class="fas fa-clone"></i></button>
-          </div>
 
-          <h3 class="modal-section-title">Options</h3>
-          <div class="modal-field-group" style="margin-top: 2rem;">
-              <label>
-                  <input type="checkbox" class="input">
-                  <span class="custom-checkbox"></span>
-                  <span class="checkbox-text">Capitalize</span>
-              </label>
-          </div>
-          <div class="modal-field-group" style="margin-top: 1rem;">
-              <label>
-                  <input type="checkbox" class="input">
-                  <span class="custom-checkbox"></span>
-                  <span class="checkbox-text">Include number</span>
-              </label>
-          </div>
+            <h3 class="modal-section-title">Options</h3>
+            <div class="modal-field-group" style="margin-top: 2rem;">
+                <label>
+                    <input name="uppercase" type="checkbox" class="input">
+                    <span class="custom-checkbox"></span>
+                    <span class="checkbox-text">Capitalize</span>
+                </label>
+            </div>
+            <div class="modal-field-group" style="margin-top: 1rem;">
+                <label>
+                    <input name="numbers" type="checkbox" class="input">
+                    <span class="custom-checkbox"></span>
+                    <span class="checkbox-text">Include number</span>
+                </label>
+            </div>
+          </form>
       </div>
       </div>
       
         <div class="progress-bar-container">
           <div id="progress_bar" class="progress-bar"></div>
         </div>
+      </div>
+
+      <div id="loader" class="loader-container hidden">
+        <div class="loader">
+          <div class="square" id="sq1"></div>
+          <div class="square" id="sq2"></div>
+          <div class="square" id="sq3"></div>
+          <div class="square" id="sq4"></div>
+          <div class="square" id="sq5"></div>
+          <div class="square" id="sq6"></div>
+          <div class="square" id="sq7"></div>
+          <div class="square" id="sq8"></div>
+          <div class="square" id="sq9"></div>
       </div>
 
       <script>
@@ -179,5 +196,7 @@
 
         <script src="../controllers/env.js"></script>
         <script type="module" src="../controllers/user_controllers.js"></script>
+        <script type="module" src="../controllers/password_controllers.js"></script>
+        <script src="../controllers/generator_controllers.js"></script>
 </body>
 </html>
