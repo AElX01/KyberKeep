@@ -551,8 +551,6 @@ input.modal-data::placeholder {
   color: #bdbecb;
 }
 
-
-
 .input:focus {
   box-shadow: 0 0 0 2.5px #2f303d;
 }
