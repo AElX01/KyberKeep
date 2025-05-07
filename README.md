@@ -18,7 +18,7 @@ An experimental web-based and quantum-safe cryptography password manager with a 
 - Credentials are encrypted and decrypted in frontend using ChaCha20-Poly1305
 - User's identity is verified using an authentication hash (not directly related to the master password) signed with Dilithium
 
-> [!SECURITY CONCERNS]
+> [!IMPORTANT]
 > **This is still an experimental project and we DO NOT recommend to use it as your daily password manager. hmac challenges are static, so far, the authenticity of users is checked by signing the authentication hash with Dilithium. The session storage will contain the vault's encryption key in raw plaintext, which is an important KyberKeep's security flaw.**
 
 > [!TIP]
