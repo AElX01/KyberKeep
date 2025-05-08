@@ -35,8 +35,8 @@ async function populate_user_info() {
     let reused_passwords = document.getElementById('reused_passwords');
     let insecure_sites = document.getElementById('insecure_sites');
     let account_health = document.getElementById('account_health');
-    
     loaderContainer.classList.remove("hidden");
+
     username.innerText = sessionStorage.username;
     user_email.innerText = sessionStorage.email;
 
@@ -46,8 +46,8 @@ async function populate_user_info() {
     .then(async response => {
         if (!response.ok) {
             const errorText = await response.text();
-            alert('Something went wrong');
             loaderContainer.classList.add("hidden");
+            alert('Something went wrong');
             return;
         }
         return response.json();
@@ -60,8 +60,8 @@ async function populate_user_info() {
         let insecure = 0;
 
         if (vaults.entries.length === 0) {
-            reused_passwords.innerHTML = `<strong>Reused Passwords:</strong> 0`;
-            insecure_sites.innerHTML = `<strong>Insecure Sites:</strong> 0`;
+            reused_passwords.innerHTML = `<strong>Logins reusing passwords:</strong> 0`;
+            insecure_sites.innerHTML = `<strong>Logins in insecure sites:</strong> 0`;
             account_health.innerHTML = `You do not have any passwords yet`;
             loaderContainer.classList.add("hidden");
             return;
@@ -79,15 +79,27 @@ async function populate_user_info() {
             }
 
             const decrypted = chacha20poly1305_decrypt(sessionStorage.vault_key, info.encrypted_data);
-            passwords.push(decrypted);
+            const decrypted_json = JSON.parse(decrypted);
+
+            if (decrypted_json.password.length) {
+              passwords.push(decrypted);
+            }
         }
+
+        if (passwords.length === 0) {
+          reused_passwords.innerHTML = `<strong>Logins reusing passwords:</strong> 0`;
+          insecure_sites.innerHTML = `<strong>Logins in insecure sites:</strong> 0`;
+          account_health.innerHTML = `You do not have any passwords yet`;
+          loaderContainer.classList.add("hidden");
+          return;
+      }
 
         let seen = new Map();
         for (let i = 0; i < passwords.length; i++) {
             const pw = passwords[i];
             if (seen.has(pw)) {
                 reusedIndices.add(i);
-                reusedIndices.add(seen.get(pw)); 
+                reusedIndices.add(seen.get(pw));
             } else {
                 seen.set(pw, i);
             }
@@ -96,11 +108,16 @@ async function populate_user_info() {
 
         let totalAtRisk = new Set([...reusedIndices, ...insecureIndices]);
         let atRiskPercentage = ((totalAtRisk.size / passwords.length) * 100).toFixed(2);
+        const username = document.getElementById('nav-footer-title');
+
+        if (atRiskPercentage > 50) {
+            show_banner(`${atRiskPercentage}% of your logins are at risk, take action now`);
+        }
 
         loaderContainer.classList.add("hidden");
-        reused_passwords.innerHTML = `<strong>Reused Passwords:</strong> ${reused}`;
-        insecure_sites.innerHTML = `<strong>Insecure Sites:</strong> ${insecure}`;
-        account_health.innerHTML = `<strong>${atRiskPercentage}%</strong> of your passwords are at risk`;
+        reused_passwords.innerHTML = `<strong>Logins reusing passwords:</strong> ${reused}`;
+        insecure_sites.innerHTML = `<strong>Logins in insecure sites:</strong> ${insecure}`;
+        account_health.innerHTML = `<strong>${atRiskPercentage}%</strong> of your logins are at risk`;
     });
 }
 

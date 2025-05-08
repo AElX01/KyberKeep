@@ -200,7 +200,7 @@ function isValidURL(str) {
     });
   }
   
-  async function populate_vaults_container(route='all') {
+  async function populate_vaults_container(route='all', fromSearchBar=false) {
     const vaultContainer = document.getElementById('vault-container');
     vaultContainer.innerHTML = '';
     route = route || 'all';
@@ -208,6 +208,7 @@ function isValidURL(str) {
     const search_bar = document.getElementById('query');
     const waiting_message = document.getElementById('waiting_logins_container');
     const main_content = document.getElementById('main-content');
+    const no_logins_container = document.getElementById('no_logins_container');
   
     const res = await fetch(`/vaults/getvault/${route}`);
     if (!res.ok) {
@@ -219,11 +220,23 @@ function isValidURL(str) {
     let { entries } = await res.json();
       
     if (!entries.length) {
-      search_icon.style.display = 'none';
-      search_bar.style.display = 'none';
-      waiting_message.style.removeProperty('display');
-      main_content.style.overflow = 'hidden';
-      main_content.style.removeProperty('overflow-y');
+      if (!fromSearchBar) {
+        search_icon.style.display = 'none';
+        search_bar.style.display = 'none';
+        waiting_message.style.removeProperty('display');
+        main_content.style.overflow = 'hidden';
+        main_content.style.removeProperty('overflow-y');
+
+        loaderContainer.classList.add("hidden");
+        return;
+      } else {
+        no_logins_container.style.removeProperty('display');
+        main_content.style.overflow = 'hidden';
+        main_content.style.removeProperty('overflow-y');
+
+        loaderContainer.classList.add("hidden");
+        return;
+      }
     }
    
     for (let [index, info] of entries.entries()) {
@@ -232,11 +245,12 @@ function isValidURL(str) {
       waiting_message.style.display = 'none';
       main_content.style.removeProperty('overflow: hidden;');
       main_content.style.overflowY = 'auto';
+      no_logins_container.style.display = 'none';
 
       let domain = isValidURL(info.url)
         ? new URL(info.url).hostname
         : '';
-      let url = isValidURL(info.url) ? info.url : '#';
+      let url = isValidURL(info.url) ? info.url : '';
 
       const card = document.createElement('div');
       card.className = 'vault-card';
@@ -333,8 +347,20 @@ async function populate_user_info() {
             }
 
             const decrypted = chacha20poly1305_decrypt(sessionStorage.vault_key, info.encrypted_data);
-            passwords.push(decrypted);
+            const decrypted_json = JSON.parse(decrypted);
+
+            if (decrypted_json.password.length) {
+              passwords.push(decrypted);
+            }
         }
+
+        if (passwords.length === 0) {
+          reused_passwords.innerHTML = `<strong>Logins reusing passwords:</strong> 0`;
+          insecure_sites.innerHTML = `<strong>Logins in insecure sites:</strong> 0`;
+          account_health.innerHTML = `You do not have any passwords yet`;
+          loaderContainer.classList.add("hidden");
+          return;
+      }
 
         let seen = new Map();
         for (let i = 0; i < passwords.length; i++) {
@@ -353,7 +379,7 @@ async function populate_user_info() {
         const username = document.getElementById('nav-footer-title');
 
         if (atRiskPercentage > 50) {
-          username.style.color = 'red';
+          show_banner(`${atRiskPercentage}% of your logins are at risk, take action now`);
         }
 
         loaderContainer.classList.add("hidden");
@@ -363,9 +389,13 @@ async function populate_user_info() {
     });
 }
 
-
 async function addNewEntry(event) {
-    document.getElementById('create_password_modal').style.display = 'none';
+    const item_name_warning = document.getElementById('item_name_warning');
+    const website_warning = document.getElementById('website_warning');
+
+    item_name_warning.style.display = 'none';
+    website_warning.style.display = 'none';
+
     event.preventDefault();
 
     const formData = new FormData(event.target);
@@ -374,9 +404,15 @@ async function addNewEntry(event) {
     
     if (!formObject.name.length) {
         loaderContainer.classList.add("hidden");
-        alert('your item must at least have a name');
+        item_name_warning.style.removeProperty('display');
         return;
     }
+
+    if (!formObject.website.length) {
+      loaderContainer.classList.add("hidden");
+      website_warning.style.removeProperty('display');
+      return;
+  }
 
     const entry = JSON.stringify({
         "username": formObject.username,
@@ -403,6 +439,7 @@ async function addNewEntry(event) {
             return;
         } 
 
+        document.getElementById('create_password_modal').style.display = 'none';
         populate_user_info();
         populate_vaults_container();
     })
@@ -440,7 +477,7 @@ if (window.location.href === local_url) {
     search_field.addEventListener('input', () => {
       clearTimeout(debounceTimeout);
       debounceTimeout = setTimeout(() => {
-        populate_vaults_container(search_field.value); 
+        populate_vaults_container(search_field.value, true); 
       }, 200); 
     });
 
@@ -476,4 +513,8 @@ if (window.location.href === local_url) {
 
     populate_vaults_container();
     populate_user_info();
+}
+
+if (window.location.href == local_url + 'settings' || window.location.href == local_url + 'generator') {
+  populate_user_info();
 }

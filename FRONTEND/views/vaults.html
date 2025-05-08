@@ -59,6 +59,14 @@
               style="display: none;"
             />
           </div>
+
+          <div id="notification_icon" class="warning">
+            <div class="warning__icon">
+                <svg fill="none" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="m13 14h-2v-5h2zm0 4h-2v-2h2zm-12 3h22l-11-19z" fill="#393a37"></path></svg>
+            </div>
+                <div id="warning_text" class="warning__title"></div>
+            <div class="warning__close"><svg height="20" viewBox="0 0 20 20" width="20" xmlns="http://www.w3.org/2000/svg"><path d="m15.8333 5.34166-1.175-1.175-4.6583 4.65834-4.65833-4.65834-1.175 1.175 4.65833 4.65834-4.65833 4.6583 1.175 1.175 4.65833-4.6583 4.6583 4.6583 1.175-1.175-4.6583-4.6583z" fill="#393a37"></path></svg></div>
+          </div>
         </div>
 
         <div id="waiting_logins_container" class="loader-wrapper">
@@ -69,6 +77,11 @@
             <div class="newtons-cradle__dot"></div>
             <div class="newtons-cradle__dot"></div>
           </div>
+        </div>
+
+        <div style="display: none;" id="no_logins_container" class="no-logins-wrapper">
+          <h1>No logins found</h1>
+          <img width="350px" height="350px" src="../assets/icon/lobster.svg">
         </div>
         
         <div class="vault-grid" id="vault-container">
@@ -174,6 +187,7 @@
             <div class="modal-field">
               <label>Item name</label>
               <input name="name" class="modal-data">
+              <label id="item_name_warning" style="color: red; display: none;">Items must have a name</label>
             </div>
 
             <h3 class="modal-section-title">Login information</h3>
@@ -200,6 +214,7 @@
               <div class="modal-field">
                 <label>Website</label>
                 <input name="website" class="modal-data" placeholder="github.com">
+                <label id="website_warning" style="color: red; display: none;">Items must have a related website</label>
               </div>
             </div>
           
@@ -228,20 +243,53 @@
             <a href="/vaults"><button class="cancel_btn"><i class="fas fa-x"></i> Cancel</button></a>
           </div>  
         </div> 
-        
-        <div id="loader" class="loader-container hidden">
-          <div class="loader">
-            <div class="square" id="sq1"></div>
-            <div class="square" id="sq2"></div>
-            <div class="square" id="sq3"></div>
-            <div class="square" id="sq4"></div>
-            <div class="square" id="sq5"></div>
-            <div class="square" id="sq6"></div>
-            <div class="square" id="sq7"></div>
-            <div class="square" id="sq8"></div>
-            <div class="square" id="sq9"></div>
+
+        <div id="something_went_wrong_banner" class="flex flex-col gap-2 w-60 sm:w-72 text-[10px] sm:text-xs z-50">
+      <div
+        class="error-alert cursor-default flex items-center justify-between w-full h-12 sm:h-14 rounded-lg bg-[#232531] px-[10px]"
+      >
+        <div class="flex gap-2">
+          <div class="text-[#d65563] bg-white/5 backdrop-blur-xl p-1 rounded-lg">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              class="w-6 h-6"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z"
+              ></path>
+            </svg>
+          </div>
+          <div>
+            <p id="something_went_wrong_context" class="text-white"></p>
+            <p id="something_went_wrong_description" class="text-gray-500"></p>
           </div>
         </div>
+      </div>
+    
+      <div class="progress-bar-container">
+        <div id="progress_bar" class="progress-bar"></div>
+      </div>
+    </div>
+
+    <div id="loader" class="loader-container hidden">
+      <div class="loader">
+        <div class="square" id="sq1"></div>
+        <div class="square" id="sq2"></div>
+        <div class="square" id="sq3"></div>
+        <div class="square" id="sq4"></div>
+        <div class="square" id="sq5"></div>
+        <div class="square" id="sq6"></div>
+        <div class="square" id="sq7"></div>
+        <div class="square" id="sq8"></div>
+        <div class="square" id="sq9"></div>
+      </div>
+    </div>
 
       <script>
                 document.addEventListener("DOMContentLoaded", () => {
@@ -331,6 +379,13 @@
             }
           });
         });
+      });
+    </script>
+
+    <script>
+      document.querySelector('.warning__close').addEventListener('click', () => {
+        const warning = document.getElementById('notification_icon');
+        warning.style.display = 'none';
       });
     </script>
 

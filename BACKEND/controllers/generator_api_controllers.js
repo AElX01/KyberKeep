@@ -71,7 +71,7 @@ exports.generatePassword = (req, res) => {
         [password[i], password[j]] = [password[j], password[i]];
     }
 
-    res.status(200).send(password.join(''));
+    res.status(200).send(password.join('').slice(0, length));
 }
 
 exports.generateUsername = (req, res) => {

@@ -15,4 +15,5 @@ getrandom = { version = "0.2", features = ["js"] }
 hmac = "0.12"
 sha2 = "0.10"
 chacha20poly1305 = { version = "0.10", features = ["alloc"] }
+pqc_dilithium = "0.2.0"
 

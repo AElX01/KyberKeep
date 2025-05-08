@@ -661,3 +661,57 @@ input.modal-data::placeholder {
   transform: translate(-50%, -30%);
   bottom: 0%;
 }
+
+.no-logins-wrapper {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  position: absolute;
+  top: 30%;
+  left: 50%;
+  transform: translate(-50%, -30%);
+  bottom: 0%;
+}
+
+/* From Uiverse.io by andrew-demchenk0 */ 
+.warning {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  width: 320px;
+  padding: 12px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: start;
+  background: #F7C752;
+  border-radius: 8px;
+  box-shadow: 0px 0px 5px -3px #111;
+}
+
+.warning__icon {
+  width: 20px;
+  height: 20px;
+  transform: translateY(-2px);
+  margin-right: 8px;
+}
+
+.warning__icon path {
+  fill: #393A37;
+}
+
+.warning__title {
+  font-weight: 500;
+  font-size: 14px;
+  color: #393A37;
+}
+
+.warning__close {
+  width: 20px;
+  height: 20px;
+  margin-left: auto;
+  cursor: pointer;
+}
+
+.warning__close path {
+  fill: #393A37;
+}
