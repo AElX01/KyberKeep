@@ -27,7 +27,6 @@ function isValidURL(str) {
     
     await init();
     const encryped = chacha20poly1305_encrypt(sessionStorage.vault_key, entry);
-    formObject.website = 'https://' + formObject.website; // take care of this
 
     fetch(`/vaults/update/${event.target.className}`, {
       method: "PATCH",
@@ -47,6 +46,7 @@ function isValidURL(str) {
       }
       
       populate_vaults_container();
+      populate_user_info();
     })
   }
 
@@ -63,6 +63,7 @@ function isValidURL(str) {
           return;
       }
       
+      populate_user_info();
       populate_vaults_container();
     })
   }
@@ -91,6 +92,7 @@ function isValidURL(str) {
         const decrypted = JSON.parse(chacha20poly1305_decrypt(sessionStorage.vault_key, entry.encrypted_data));
 
         let index = entry._id;
+        let url = entry.url;
         modal.innerHTML = `
           <div class="modal-content">
             <button class="modal-close">&times;</button>
@@ -126,9 +128,9 @@ function isValidURL(str) {
               <div class="modal-field-group">
                 <div class="modal-field">
                   <label>Website</label>
-                  <input name="website" class="modal-data" value="${domainText}">
+                  <input name="website" class="modal-data" value="${url}">
                 </div>
-                <button type="button" class="modal_cpy_btn"><i class="fas fa-up-right-from-square"></i></button>
+                <button onclick="window.open('${url}', '_blank', 'noopener,noreferrer')" type="button" class="modal_cpy_btn"><i class="fas fa-up-right-from-square"></i></button>
                 <button type="button" class="modal_cpy_btn"><i class="fas fa-clone"></i></button>
               </div>
               <div class="modal-actions">
@@ -203,6 +205,10 @@ function isValidURL(str) {
     const vaultContainer = document.getElementById('vault-container');
     vaultContainer.innerHTML = '';
     route = route || 'all';
+    const search_icon = document.getElementById('search_icon_id');
+    const search_bar = document.getElementById('query');
+    const waiting_message = document.getElementById('waiting_logins_container');
+    const main_content = document.getElementById('main-content');
   
     const res = await fetch(`/vaults/getvault/${route}`);
     if (!res.ok) {
@@ -212,8 +218,22 @@ function isValidURL(str) {
     }
 
     let { entries } = await res.json();
-  
+      
+    if (!entries.length) {
+      search_icon.style.display = 'none';
+      search_bar.style.display = 'none';
+      waiting_message.style.removeProperty('display');
+      main_content.style.overflow = 'hidden';
+      main_content.style.removeProperty('overflow-y');
+    }
+   
     for (let [index, info] of entries.entries()) {
+      search_icon.style.removeProperty('display');
+      search_bar.style.removeProperty('display');
+      waiting_message.style.display = 'none';
+      main_content.style.removeProperty('overflow: hidden;');
+      main_content.style.overflowY = 'auto';
+
       let domain = isValidURL(info.url)
         ? new URL(info.url).hostname
         : '';
@@ -232,7 +252,7 @@ function isValidURL(str) {
           <div class="vault-meta">${domain}</div>
         </div>
         <div class="vault-actions">
-          <button onclick="window.open('${url}', '_blank')">
+          <button onclick="window.open('${url}', '_blank', 'noopener,noreferrer')">
             <i class="fas fa-up-right-from-square"></i>
           </button>
           <button onclick="cloneLogin('${index}')">
@@ -260,6 +280,7 @@ window.cloneLogin = function(index) {
         }
         
         populate_vaults_container();
+        populate_user_info();
     })
 }
 
@@ -330,11 +351,16 @@ async function populate_user_info() {
 
         let totalAtRisk = new Set([...reusedIndices, ...insecureIndices]);
         let atRiskPercentage = ((totalAtRisk.size / passwords.length) * 100).toFixed(2);
+        const username = document.getElementById('nav-footer-title');
+
+        if (atRiskPercentage > 50) {
+          username.style.color = 'red';
+        }
 
         loaderContainer.classList.add("hidden");
         reused_passwords.innerHTML = `<strong>Logins reusing passwords:</strong> ${reused}`;
         insecure_sites.innerHTML = `<strong>Logins in insecure sites:</strong> ${insecure}`;
-        account_health.innerHTML = `<strong>${atRiskPercentage}%</strong> of your passwords are at risk`;
+        account_health.innerHTML = `<strong>${atRiskPercentage}%</strong> of your logins are at risk`;
     });
 }
 

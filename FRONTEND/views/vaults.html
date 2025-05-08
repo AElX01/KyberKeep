@@ -21,7 +21,7 @@
           <div class="nav-button"><a href="/generator"><i class="fas fa-plus"></i><span>Generator</span></a></div>
           <hr/>
           <div class="nav-button"><a href="/settings"><i class="fas fa-gear"></i><span>Settings</span></a></div>
-          <div class="nav-button"><a href="/users/logout"><i class="fas fa-right-from-bracket"></i><span>Logout</span></div></a>
+          <div class="nav-button"><a href="/users/logout"><i class="fas fa-right-from-bracket"></i><span>Logout</span></a></div>
           <div id="nav-content-highlight"></div>
         </div>
         <input id="nav-footer-toggle" type="checkbox"/>
@@ -42,7 +42,7 @@
         <div class="header-row">
           <h1 id="vaults-title">My Vaults</h1>
           <div class="group">
-            <svg viewBox="0 0 24 24" aria-hidden="true" class="search-icon">
+            <svg id="search_icon_id" style="display: none;" viewBox="0 0 24 24" aria-hidden="true" class="search-icon">
               <g>
                 <path
                   d="M21.53 20.47l-3.66-3.66C19.195 15.24 20 13.214 20 11c0-4.97-4.03-9-9-9s-9 4.03-9 9 4.03 9 9 9c2.215 0 4.24-.804 5.808-2.13l3.66 3.66c.147.146.34.22.53.22s.385-.073.53-.22c.295-.293.295-.767.002-1.06zM3.5 11c0-4.135 3.365-7.5 7.5-7.5s7.5 3.365 7.5 7.5-3.365 7.5-7.5 7.5-7.5-3.365-7.5-7.5z"
@@ -56,7 +56,18 @@
               type="search"
               placeholder="Search..."
               name="searchbar"
+              style="display: none;"
             />
+          </div>
+        </div>
+
+        <div id="waiting_logins_container" class="loader-wrapper">
+          <h1>Waiting for you to create a login</h1>
+          <div class="newtons-cradle">
+            <div class="newtons-cradle__dot"></div>
+            <div class="newtons-cradle__dot"></div>
+            <div class="newtons-cradle__dot"></div>
+            <div class="newtons-cradle__dot"></div>
           </div>
         </div>
         
@@ -86,12 +97,10 @@
           
             <div class="vault-actions">
               <button><i class="fas fa-up-right-from-square"></i></button>
-              <button><i class="fas fa-ellipsis-vertical"></i></button>
-              
+              <button><i class="fas fa-ellipsis-vertical"></i></button>          
             </div>
           </div>  
         </div>
-
 
         <button class="new_password" onclick="toggleModal('#create_password_modal')"> 
           <i class="fas fa-plus"></i>
@@ -207,7 +216,7 @@
           <button class="modal-close">&times;</button>
       
           <div class="modal-header">
-            <h2 class="modal-title">Save changes</h2>
+            <h2 class="modal-title">Generate password</h2>
           </div>
       
           <div class="modal-field">
@@ -231,9 +240,9 @@
             <div class="square" id="sq7"></div>
             <div class="square" id="sq8"></div>
             <div class="square" id="sq9"></div>
+          </div>
         </div>
 
-      
       <script>
                 document.addEventListener("DOMContentLoaded", () => {
             const navToggle = document.getElementById("nav-toggle");
