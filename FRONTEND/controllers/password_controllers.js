@@ -23,7 +23,6 @@ function isValidURL(str) {
       "username": formObject.username,
       "password": formObject.password
     });
-    console.log(formObject.website);
     
     await init();
     const encryped = chacha20poly1305_encrypt(sessionStorage.vault_key, entry);

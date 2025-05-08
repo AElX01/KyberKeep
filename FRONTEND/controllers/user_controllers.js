@@ -2,7 +2,8 @@ import init, {
     derive_key_from_master_password, 
     generate_auth_hmac,
     derive_key_from_master_password_with_defined_salt,
-    chacha20poly1305_decrypt
+    chacha20poly1305_decrypt,
+    chacha20poly1305_encrypt
  } from "/cryptography/cryptography_rs.js";
 
 
@@ -133,6 +134,53 @@ async function update_password(event) {
     const new_masterSalt = new_masterMetadata.slice(0, 32);
     const new_challenge = new_masterKey + 'authentication';
     const new_hmac = generate_auth_hmac(new_masterKey, new_challenge);
+    const symmetricKey = derive_key_from_master_password_with_defined_salt(new_masterKey, new_masterSalt);
+    
+
+    fetch('/vaults/getvault/all', {
+        method: 'GET'
+    })
+    .then(async response => {
+        if (!response.ok) {
+            const errorText = await response.text();
+            alert('something went wrong');
+            loaderContainer.classList.add("hidden");
+            return;
+        }
+        return response.json();
+    })
+    .then(async vault => {
+        let entries = vault.entries;
+
+        if (!entries.length) {
+            loaderContainer.classList.add("hidden");
+            return;
+        }
+
+        let decrypted;
+        let encrypted;
+
+        for (let entry of entries) {
+            decrypted = chacha20poly1305_decrypt(sessionStorage.vault_key, entry.encrypted_data);
+            encrypted = chacha20poly1305_encrypt(symmetricKey, decrypted);
+            entry.encrypted_data = encrypted;
+
+            fetch(`/vaults/update/${entry._id}`, {
+                method: "PATCH",
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(entry)
+            })
+            .then(async response => {
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    alert('Something went wrong');
+                    loaderContainer.classList.add("hidden");
+                    return;
+                }
+            })
+        }
+    })
+
     fetch('/users/update', {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json', 'auth_hash': hmac },
@@ -152,6 +200,7 @@ async function update_password(event) {
     })
     .then(user => {
         loaderContainer.classList.add("hidden");
+        sessionStorage.setItem('vault_key', symmetricKey);
         sessionStorage.setItem('username', user.username);
         sessionStorage.setItem('email', user.email);
         sessionStorage.setItem('salt', user.salt);
@@ -327,4 +376,4 @@ if (window.location.href === local_url + 'settings') {
     document.getElementById('delete_user_modal').addEventListener('submit', delete_user);
 }
 
-populate_user_info();
+populate_user_info(); 
