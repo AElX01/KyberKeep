@@ -107,14 +107,13 @@ exports.getLoginInfo = async (req, res) => {
 
     try {
         const vault = await Vault.findOne({ email });
-
         if (req.params.toGet === 'all') {
             if (!vault) {
                 return res.sendStatus(404);
             }
 
             res.status(200).json({ entries: vault.encrypted_vault });
-        } else if (/^[a-zA-Z]+$/.test(req.params.toGet)) {
+        } else if (/^[a-zA-Z0-9]+$/.test(req.params.toGet) && req.query.id=='false') {
             const searchTerm = req.params.toGet.toLowerCase();
             const match = vault.encrypted_vault.filter(obj => obj.item_name.toLocaleLowerCase().includes(searchTerm));
 

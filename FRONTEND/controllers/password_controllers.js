@@ -73,7 +73,7 @@ function isValidURL(str) {
     const domainText = card.querySelector('.vault-meta').textContent;
     loaderContainer.classList.remove("hidden");
 
-    fetch(`/vaults/getvault/${card.id}`, {
+    fetch(`/vaults/getvault/${card.id}?id=true`, {
         method: "GET"
     })
     .then(async response => {
@@ -209,8 +209,9 @@ function isValidURL(str) {
     const waiting_message = document.getElementById('waiting_logins_container');
     const main_content = document.getElementById('main-content');
     const no_logins_container = document.getElementById('no_logins_container');
+    const getById = fromSearchBar ? false : true;
   
-    const res = await fetch(`/vaults/getvault/${route}`);
+    const res = await fetch(`/vaults/getvault/${route}?id=${getById}`);
     if (!res.ok) {
       loaderContainer.classList.add("hidden");
       alert('Something went wrong');
@@ -308,7 +309,7 @@ async function populate_user_info() {
     username.innerText = sessionStorage.username;
     user_email.innerText = sessionStorage.email;
 
-    fetch('/vaults/getvault/all', {
+    fetch('/vaults/getvault/all?id=false', {
         method: "GET",
     })
     .then(async response => {
