@@ -1,24 +1,47 @@
 {
-    "manifest_version": 3,
-    "name": "KyberKeep",
-    "version": "1.0",
-    "description": "Autofill and save passwords securely.",
-    "permissions": [
+  "manifest_version": 3,
+  "name": "KyberKeep",
+  "version": "1.0",
+  "description": "Autofill and save passwords securely.",
+  "action": {
+    "default_popup": "views/login.html",
+    "default_icon": {
+      "16": "assets/icon/Logo.png",
+      "48": "assets/icon/Logo.png",
+      "128": "assets/icon/Logo.png"
+    }
+  },
+  "permissions": [
       "storage",
       "activeTab",
       "scripting",
       "identity",
       "tabs"
     ],
+    "background": {
+    "service_worker": "js/background.js"
+    },
     "host_permissions": [
       "<all_urls>"
     ],
-    "action": {
-      "default_popup": "views/popup.html",
-      "default_icon": {
-        "16": "assets/icon/Logo.png",
-        "48": "assets/icon/Logo.png",
-        "128": "assets/icon/Logo.png"
-      }
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["assets/libs/tailwindcss/index.global.js"]
     }
+  ],
+  "web_accessible_resources": [
+  {
+    "resources": ["assets/wasm/*.wasm"],
+    "matches": ["<all_urls>"]
   }
+],
+  "sandbox": {
+    "pages": [
+      "views/sandbox.html"
+    ]
+  },
+  "content_security_policy": {
+      "extension_pages": "script-src 'self'; object-src 'self';"
+  }
+}

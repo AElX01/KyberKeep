@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Sandbox</title>
+  <script type="module" src="../js/sandbox.js"></script>
+</head>
+<body>
+  <h1>Sandbox</h1>
+  <iframe id="wasm_sandbox"
+        src="chrome-extension://${chrome.runtime.id}/views/sandbox.html"
+        sandbox="allow-scripts"
+        style="display:none;"></iframe>
+</body>
+</html>

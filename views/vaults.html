@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Vaults</title>
+  <link rel="stylesheet" href="../assets/css/vaults_list.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+  <header>
+    <h1>My Vaults</h1>
+  </header>
+  <main>
+    <div id="vault-list"><!-- Aquí se inyectan las tarjetas --></div>
+  </main>
+
+  <div id="loader" class="loader-container hidden">
+    <div class="loader">
+      <div class="square" id="sq1"></div>
+      <div class="square" id="sq2"></div>
+      <div class="square" id="sq3"></div>
+      <div class="square" id="sq4"></div>
+      <div class="square" id="sq5"></div>
+      <div class="square" id="sq6"></div>
+      <div class="square" id="sq7"></div>
+      <div class="square" id="sq8"></div>
+      <div class="square" id="sq9"></div>
+    </div>
+  </div>
+
+  <iframe id="wasm_sandbox" src="sandbox.html" sandbox="allow-scripts" style="display: none;"></iframe>
+  <script src="../js/env.js"></script>
+  <script type="module" src="../js/vaults_controller.js"></script>
+</body>
+</html>

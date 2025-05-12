@@ -1,0 +1,103 @@
+body {
+    width: 400px;
+    min-height: 600px;
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f8f9fa;
+}
+    header {
+    background-color: #343a40;
+    color: white;
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 16px;
+    height: 70px;
+    font-size: 20px;
+}
+.nav-links a {
+    color: white;
+    margin-left: 10px;
+    text-decoration: none;
+    font-size: 14px;
+}
+main {
+    padding: 10px;
+}
+.search-bar {
+    margin-top: 10px;
+    margin-bottom: 50px;
+    display: flex;
+    height: 50px;
+}
+.search-bar input {
+    flex: 1;
+    padding: 5px;
+    font-size: 14px;
+    border: 1px solid #ced4da;
+    border-radius: 4px 0 0 4px;
+    outline: none;
+}
+
+.login-card {
+    background-color: white;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    padding: 10px;
+    margin-bottom: 10px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.login-card:hover {
+    background-color: #f1f3f5;
+}
+
+.login-info {
+    display: flex;
+    align-items: center;
+}
+
+.favicon {
+    width: 32px;
+    height: 32px;
+    margin-right: 10px;
+    border-radius: 4px;
+}
+
+.text-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.login-title {
+    font-weight: bold;
+    font-size: 16px;
+    color: #212529;
+}
+
+.login-username {
+    font-size: 13px;
+    color: #6c757d;
+}
+
+.login-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.action-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #495057;
+    font-size: 16px;
+    padding: 4px;
+}
+
+.action-btn:hover {
+    color: #0d6efd; /* Primary blue on hover */
+}
