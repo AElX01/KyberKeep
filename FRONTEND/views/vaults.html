@@ -495,6 +495,37 @@
       })
     </script>
 
+    <script>
+      const modal = document.getElementById('username_generator_modal');
+      modal.querySelectorAll('.modal_cpy_btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+
+          const container = btn.closest('.modal-field-group') || btn.closest('.modal-field');
+          const input = container.querySelector('.modal-data');
+          if (!input) return;
+        
+        
+          if (btn.querySelector('.fa-clone')) {
+            navigator.clipboard.writeText(input.value)
+              .then(() => {
+
+                btn.innerHTML = '<i class="fas fa-check"></i>';
+                setTimeout(() => btn.innerHTML = '<i class="fas fa-clone"></i>', 1000);
+              })
+              .catch(err => console.error('Clipboard write failed', err));
+          }
+
+          else if (btn.querySelector('.fa-eye-slash') || btn.querySelector('.fa-eye')) {
+
+            const isHidden = input.type === 'password';
+            input.type = isHidden ? 'text' : 'password';
+
+            btn.innerHTML = `<i class="fas ${isHidden ? 'fa-eye' : 'fa-eye-slash'}"></i>`;
+          }
+        });
+      });
+    </script>
+
     <script src="../controllers/env.js"></script>
     <script type="module" src="../controllers/user_controllers.js"></script>
     <script type="module" src="../controllers/password_controllers.js"></script>

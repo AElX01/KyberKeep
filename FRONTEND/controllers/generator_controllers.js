@@ -61,7 +61,7 @@ function generateUser(event) {
         populate_field(username, 'generated_username');
     })
 }
-// kjllj
+
 if (window.location.href === local_url + 'generator' || window.location.href === local_url) {
     const modal = window.location.href === local_url + 'generator' ? document.getElementById('main-generate-password') : document.getElementById('password_generator_modal');
     modal.querySelectorAll('.modal_cpy_btn').forEach(btn => {
