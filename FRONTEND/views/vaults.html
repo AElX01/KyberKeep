@@ -196,7 +196,7 @@
                 <label>Username</label>
                 <input name="username" class="modal-data" placeholder="github.com">
               </div>
-              <button type="button" class="modal_cpy_btn"><i class="fas fa-arrows-rotate"></i></button>
+              <button id="generate_username_btn" type="button" class="modal_cpy_btn"><i class="fas fa-arrows-rotate"></i></button>
             </div>
 
             <div class="modal-field-group">
@@ -205,7 +205,7 @@
                 <input name="password" type="password" class="modal-data" placeholder="github.com">
               </div>
               <button type="button" class="modal_cpy_btn"><i class="fas fa-eye-slash"></i></button>
-              <button type="button" class="modal_cpy_btn"><i class="fas fa-arrows-rotate"></i></button>
+              <button id="generate_password_btn" type="button" class="modal_cpy_btn"><i class="fas fa-arrows-rotate"></i></button>
             </div>
 
 
@@ -226,23 +226,104 @@
         </div>
       </div>
 
-      <div id="confirmation_modal" class="modal-overlay">
+      <div id="password_generator_modal" class="modal-overlay" style="display: none;">
         <div class="modal-content">
           <button class="modal-close">&times;</button>
       
           <div class="modal-header">
-            <h2 class="modal-title">Generate password</h2>
+            <h3 class="modal-section-title">Password</h3>
           </div>
-      
-          <div class="modal-field">
-            <p style="text-align: center;">Are you sure you want to save this login information?</p>
-          </div>
-      
-          <div class="modal-actions">
-            <button class="edit_btn"><i class="fas fa-pen"></i> Save</button>
-            <a href="/vaults"><button class="cancel_btn"><i class="fas fa-x"></i> Cancel</button></a>
-          </div>  
+
+          <form id="generate_password_form">
+              <div class="modal-field-group">
+                <div class="modal-field">
+                  <input id="generated_password" class="modal-data" disabled>
+                </div>
+                <button type="submit" class="modal_cpy_btn"><i class="fas fa-arrows-rotate"></i></button>
+                <button id="clone_generated_password" type="button" class="modal_cpy_btn"><i class="fas fa-clone"></i></button>
+              </div>
+
+                <h3 class="modal-section-title">Options</h3>
+                <div class="modal-field-group">
+                  <div class="modal-field">
+                    <label>Length</label>
+                    <input name="length" class="modal-data">
+                  </div>
+                </div>
+
+                <h3 class="modal-section-title">Include</h3>
+                <div class="modal-field-group">
+                    <div class="modal-field">
+                      <label>Minimum numbers</label>
+                      <input name="min" class="modal-data">
+                    </div>
+                </div>
+                <div class="modal-field-group">
+                  <div class="modal-field">
+                      <label>Minimum special</label>
+                      <input name="max" class="modal-data">
+                  </div>
+              </div>
+
+                <div class="modal-field-group" style="margin-top: 2rem;">
+                    <label>
+                        <input name="uppercase" type="checkbox" class="input">
+                        <span class="custom-checkbox"></span>
+                        <span class="checkbox-text">A-Z</span>
+                    </label>
+                </div>
+                <div class="modal-field-group" style="margin-top: 1rem;">
+                  <label>
+                      <input name="lowercase" type="checkbox" class="input">
+                      <span class="custom-checkbox"></span>
+                      <span class="checkbox-text">a-z</span>
+                  </label>
+              </div>
+              <div class="modal-field-group" style="margin-top: 1rem;">
+                  <label>
+                      <input name="numbers" type="checkbox" class="input">
+                      <span class="custom-checkbox"></span>
+                      <span class="checkbox-text">0-9</span>
+                  </label>
+              </div>
+            </form>
+        </div>
         </div> 
+
+        <div id="username_generator_modal" class="modal-overlay" style="display: none;">
+        <div class="modal-content">
+          <button class="modal-close">&times;</button>
+      
+          <div class="modal-header">
+            <h3 class="modal-section-title">Username</h3>
+          </div>
+
+          <form id="generated_username_form">
+            <div class="modal-field-group">
+              <div class="modal-field">
+                <input id="generated_username" class="modal-data" disabled>
+              </div>
+              <button type="submit" class="modal_cpy_btn"><i class="fas fa-arrows-rotate"></i></button>
+              <button id="clone_generated_username" type="button" class="modal_cpy_btn"><i class="fas fa-clone"></i></button>
+            </div>
+
+            <h3 class="modal-section-title">Options</h3>
+            <div class="modal-field-group" style="margin-top: 2rem;">
+                <label>
+                    <input name="uppercase" type="checkbox" class="input">
+                    <span class="custom-checkbox"></span>
+                    <span class="checkbox-text">Capitalize</span>
+                </label>
+            </div>
+            <div class="modal-field-group" style="margin-top: 1rem;">
+                <label>
+                    <input name="numbers" type="checkbox" class="input">
+                    <span class="custom-checkbox"></span>
+                    <span class="checkbox-text">Include number</span>
+                </label>
+            </div>
+          </form>
+        </div>
 
         <div id="something_went_wrong_banner" class="flex flex-col gap-2 w-60 sm:w-72 text-[10px] sm:text-xs z-50">
       <div
@@ -389,8 +470,34 @@
       });
     </script>
 
+    <script>
+      const generate_password_btn = document.getElementById('generate_password_btn');
+      const generate_username_btn = document.getElementById('generate_username_btn');
+      const password_generator_modal = document.getElementById('password_generator_modal');
+      const username_generator_modal = document.getElementById('username_generator_modal');
+      const clone_generated_password = document.getElementById('clone_generated_password');
+      const clone_generated_username = document.getElementById('clone_generated_username');
+
+      generate_password_btn.addEventListener('click', () => {
+        password_generator_modal.style.removeProperty('display');
+      })
+
+      generate_username_btn.addEventListener('click', () => {
+        username_generator_modal.style.removeProperty('display');
+      })
+
+      clone_generated_password.addEventListener('click', () => {
+        password_generator_modal.style.display = 'none';
+      })
+
+      clone_generated_username.addEventListener('click', () => {
+        username_generator_modal.style.display = 'none';
+      })
+    </script>
+
     <script src="../controllers/env.js"></script>
     <script type="module" src="../controllers/user_controllers.js"></script>
     <script type="module" src="../controllers/password_controllers.js"></script>
+    <script src="../controllers/generator_controllers.js"></script>
 </body>
 </html>
