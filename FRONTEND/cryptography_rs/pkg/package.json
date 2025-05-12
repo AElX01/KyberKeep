@@ -1,0 +1,15 @@
+{
+  "name": "cryptography_rs",
+  "type": "module",
+  "version": "0.1.0",
+  "files": [
+    "cryptography_rs_bg.wasm",
+    "cryptography_rs.js",
+    "cryptography_rs.d.ts"
+  ],
+  "main": "cryptography_rs.js",
+  "types": "cryptography_rs.d.ts",
+  "sideEffects": [
+    "./snippets/*"
+  ]
+}
