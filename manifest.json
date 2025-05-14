@@ -27,15 +27,18 @@
   "content_scripts": [
     {
       "matches": ["<all_urls>"],
-      "js": ["assets/libs/tailwindcss/index.global.js"]
+      "js": [
+        "js/content_script.js"
+      ],
+      "run_at": "document_idle"
     }
   ],
   "web_accessible_resources": [
-  {
-    "resources": ["assets/wasm/*.wasm"],
-    "matches": ["<all_urls>"]
-  }
-],
+    {
+      "resources": ["views/sandbox.html", "cryptography_rs/pkg/cryptography_rs_bg.wasm"],
+      "matches": ["<all_urls>"]
+    }
+  ],
   "sandbox": {
     "pages": [
       "views/sandbox.html"

@@ -1,4 +1,4 @@
-// js/background.js
+const local_url_b = 'http://127.0.0.1:3000/'; 
 
 const STORAGE_KEYS = {
     JWT: 'jwt',
@@ -93,6 +93,18 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
                 }
             });
             return true;
+
+        case 'GET_ALL_VAULTS':
+
+        fetch(`${local_url_b}vaults/getvault/all`)
+            .then(r => r.json())
+            .then(data => sendResponse({ entries: data.entries }))
+            .catch(err => {
+            console.error('Error fetching vaults for autofill:', err);
+            sendResponse({ entries: [] });
+            });
+        return true;
+
 
         default:
             console.warn('[Background] Unknown message type received:', message.type);

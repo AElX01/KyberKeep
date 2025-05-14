@@ -1,6 +1,6 @@
 // js/vaults_controller.js
 
-const local_url = window.local_url; // Assumes this is correctly defined elsewhere
+const local_url = window.local_url;
 let sandboxWin, wasmReady = false;
 let vaultList, loader, iframe, vault_key;
 
