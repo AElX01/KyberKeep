@@ -18,3 +18,13 @@ A web-based password manager with a Rust cryptography backend.
 
 > [!IMPORTANT]
 > **This is a personal project, feel free to modify anything...**
+
+## Screenshots
+
+Login: 
+
+![Login](FRONTEND/assets/icon/login.png)
+
+Home:
+
+![Home](FRONTEND/assets/icon/main.png)
